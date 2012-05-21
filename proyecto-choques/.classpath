@@ -11,13 +11,13 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="choques/lib/base/core"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/base/core/core.jar">
+	<classpathentry kind="lib" path="lib/base/core/core.jar" sourcepath="lib/user">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="choques/lib/base/core"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/toxiclibs_p5.jar"/>
-	<classpathentry kind="lib" path="lib/user/toxiclibscore.jar"/>
+	<classpathentry kind="lib" path="lib/user/toxiclibs_p5.jar" sourcepath="lib/user/src/"/>
+	<classpathentry kind="lib" path="lib/user/toxiclibscore.jar" sourcepath="lib/user/src/"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
