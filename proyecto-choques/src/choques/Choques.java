@@ -23,8 +23,45 @@ public class Choques extends PApplet {
 	  mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("/mesh/mesh.stl"),STLReader.TRIANGLEMESH);
 //	  mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("mesh-flipped.stl"),STLReader.TRIANGLEMESH).flipYAxis();
 	  gfx=new ToxiclibsSupport(this);
-	  camera = new PeasyCam(this, 0, 0, 0, 50);
+//	  camera = new PeasyCam(this, 0, 0, 0, 50);
 	  cp5 = new ControlP5(this);
+	  
+
+	  // create a new button with name 'buttonA'
+	  cp5.addButton("colorA")
+	     .setValue(0)
+	     .setPosition(100,100)
+	     .setSize(200,19)
+	     ;
+	  
+	  // and add another 2 buttons
+	  cp5.addButton("colorB")
+	     .setValue(100)
+	     .setPosition(100,120)
+	     .setSize(200,19)
+	     ;
+	     
+	  cp5.addButton("colorC")
+	     .setPosition(100,140)
+	     .setSize(200,19)
+	     .setValue(0)
+	     ;
+
+	  PImage[] imgs = {loadImage("res/button_a.png"),loadImage("res/button_b.png"),loadImage("res/button_c.png")};
+	  cp5.addButton("play")
+	     .setValue(128)
+	     .setPosition(140,300)
+	     .setImages(imgs)
+	     .updateSize()
+	     ;
+	     
+	  cp5.addButton("playAgain")
+	     .setValue(128)
+	     .setPosition(210,300)
+	     .setImages(imgs)
+	     .updateSize()
+	     ;
+
 	  
 	}
 
@@ -41,6 +78,7 @@ public class Choques extends PApplet {
 	  noStroke();
 	  gfx.mesh(mesh,false,10);
 //	  gfx.mesh(mesh);
+	  cp5.draw();
 	}
 	public static void main(String _args[]) {
 		PApplet.main(new String[] { choques.Choques.class.getName() });
