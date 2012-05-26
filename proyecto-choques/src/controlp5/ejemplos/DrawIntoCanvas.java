@@ -23,6 +23,7 @@ import controlP5.ControlWindow;
 import controlP5.ControlWindowCanvas;
 
 public class DrawIntoCanvas extends PApplet {
+	private static final long serialVersionUID = -2261752365014781766L;
 
 	ControlP5 controlP5;
 	ControlWindow controlWindow;
@@ -33,77 +34,36 @@ public class DrawIntoCanvas extends PApplet {
 
 	// your controlWindowCanvas class
 	class MyCanvas extends ControlWindowCanvas {
-		
 
 		private ControlP5 cp5;
 
 		@Override
 		public void setup(PApplet theApplet) {
 			super.setup(theApplet);
-			  cp5 = new ControlP5(theApplet);
-			  
+			cp5 = new ControlP5(theApplet);
+			// create a new button with name 'buttonA'
+			cp5.addButton("colorA").setValue(0).setPosition(100, 100)
+					.setSize(200, 19);
 
-			  // create a new button with name 'buttonA'
-			  cp5.addButton("colorA")
-			     .setValue(0)
-			     .setPosition(100,100)
-			     .setSize(200,19)
-			     ;
-			  
-			  // and add another 2 buttons
-			  cp5.addButton("colorB")
-			     .setValue(100)
-			     .setPosition(100,120)
-			     .setSize(200,19)
-			     ;
-			     
-			  cp5.addButton("colorC")
-			     .setPosition(100,140)
-			     .setSize(200,19)
-			     .setValue(0)
-			     ;
+			// and add another 2 buttons
+			cp5.addButton("colorB").setValue(100).setPosition(100, 120)
+					.setSize(200, 19);
 
-			  PImage[] imgs = {loadImage("res/button_a.png"),loadImage("res/button_b.png"),loadImage("res/button_c.png")};
-			  cp5.addButton("play")
-			     .setValue(128)
-			     .setPosition(140,300)
-			     .setImages(imgs)
-			     .updateSize()
-			     ;
-			     
-			  cp5.addButton("playAgain")
-			     .setValue(128)
-			     .setPosition(210,300)
-			     .setImages(imgs)
-			     .updateSize()
-			     ;
+			cp5.addButton("colorC").setPosition(100, 140).setSize(200, 19)
+					.setValue(0);
 
-			  
+			PImage[] imgs = { loadImage("res/button_a.png"),
+					loadImage("res/button_b.png"),
+					loadImage("res/button_c.png") };
+			cp5.addButton("play").setValue(128).setPosition(140, 300)
+					.setImages(imgs).updateSize();
+
+			cp5.addButton("playAgain").setValue(128).setPosition(210, 300)
+					.setImages(imgs).updateSize();
 		}
 
 		@Override
 		public void draw(PApplet theApplet) {
-		    theApplet.background(255);
-		     // a rectangle will be drawn if the mouse has been
-		    // pressed inside the main sketch window.
-		    // mousePressed here refers to the mousePressed
-		    // variable of your main sketch
-		    if(mousePressed) {
-		      theApplet.fill(255,0,0);
-		      theApplet.rect(10,10,100,100);
-		      theApplet.fill(0);
-		      theApplet.ellipse(mouseX,mouseY,20,20);
-		    }
-		    // will draw a rectangle into the controlWindow
-		    // if the mouse has been pressed inside the controlWindow itself.
-		    // theApplet.mousePressed here refers to the
-		    // mousePressed variable of the controlWindow.
-		    if(theApplet.mousePressed) {
-		      theApplet.fill(0);
-		      theApplet.rect(10,10,100,100);
-		      theApplet.fill(255,0,0);
-		      theApplet.ellipse(theApplet.mouseX,theApplet.mouseY,20,20);
-		    }
 
 		}
 
@@ -117,8 +77,6 @@ public class DrawIntoCanvas extends PApplet {
 		size(600, 600, P3D);
 		mesh = (TriangleMesh) new STLReader().loadBinary(
 				sketchPath("mesh/mesh.stl"), STLReader.TRIANGLEMESH);
-		// mesh=(TriangleMesh)new
-		// STLReader().loadBinary(sketchPath("mesh-flipped.stl"),STLReader.TRIANGLEMESH).flipYAxis();
 		gfx = new ToxiclibsSupport(this);
 		camera = new PeasyCam(this, 0, 0, 0, 50);
 
@@ -129,9 +87,9 @@ public class DrawIntoCanvas extends PApplet {
 		controlWindow.setUpdateMode(ControlWindow.NORMAL);
 		// controlWindow.setUpdateMode(ControlWindow.NORMAL);
 		//
-		 cc = new MyCanvas();
-		 cc.pre();
-		 controlWindow.addCanvas(cc);
+		cc = new MyCanvas();
+		cc.pre();
+		// controlWindow.addCanvas(cc);
 
 	}
 
