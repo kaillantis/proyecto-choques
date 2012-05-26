@@ -35,8 +35,6 @@ public class DrawIntoCanvas extends PApplet {
 
 		@Override
 		public void draw(PApplet theApplet) {
-			// theApplet.draw();
-			theApplet.background(255);
 			// a rectangle will be drawn if the mouse has been
 			// pressed inside the main sketch window.
 			// mousePressed here refers to the mousePressed
@@ -80,10 +78,10 @@ public class DrawIntoCanvas extends PApplet {
 		controlWindow = controlP5.addControlWindow("controlP5window", 100, 100,
 				500, 100, 30);
 		controlWindow.setUpdateMode(ControlWindow.NORMAL);
-
-		cc = new MyCanvas();
-		cc.pre();
-		controlWindow.addCanvas(cc);
+		//
+		// cc = new MyCanvas();
+		// cc.pre();
+		// controlWindow.addCanvas(cc);
 
 	}
 
