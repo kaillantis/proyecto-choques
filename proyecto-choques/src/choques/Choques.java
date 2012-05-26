@@ -23,7 +23,7 @@ public class Choques extends PApplet {
 	  mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("mesh/mesh.stl"),STLReader.TRIANGLEMESH);
 //	  mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("mesh-flipped.stl"),STLReader.TRIANGLEMESH).flipYAxis();
 	  gfx=new ToxiclibsSupport(this);
-	  camera = new PeasyCam(this, 0, 0, 0, 50);
+//	  camera = new PeasyCam(this, 0, 0, 0, 50);
 	  cp5 = new ControlP5(this);
 	  
 
@@ -76,7 +76,7 @@ public class Choques extends PApplet {
 	  
 //	  gfx.origin(new Vec3D(),200);
 	  noStroke();
-	  gfx.mesh(mesh,false,10);
+//	  gfx.mesh(mesh,false,10);
 //	  gfx.mesh(mesh);
 	  cp5.draw();
 	}

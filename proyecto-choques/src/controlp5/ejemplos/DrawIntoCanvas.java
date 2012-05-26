@@ -98,8 +98,10 @@ public class DrawIntoCanvas extends PApplet {
 	public void draw() {
 		 background(sliderValue);
 		  lights();
-		  gfx.mesh(mesh,false,10);
-	  
+		  gfx.mesh(mesh);
+		  stroke(255, 166, 0);
+	  cp5.draw();
+	   
 	}
 
 	void myTextfield(String theValue) {
