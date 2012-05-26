@@ -19,6 +19,7 @@
 	<classpathentry kind="lib" path="lib/user/toxiclibs_p5.jar" sourcepath="lib/user/src/"/>
 	<classpathentry kind="lib" path="lib/user/toxiclibscore.jar" sourcepath="lib/user/src/"/>
 	<classpathentry kind="lib" path="lib/user/peasycam.jar" sourcepath="lib/user/src"/>
+	<classpathentry kind="lib" path="lib/user/controlP5.jar" sourcepath="lib/user"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

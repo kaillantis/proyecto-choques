@@ -1,8 +1,9 @@
 package choques;
 
+import controlP5.ControlP5;
 import peasy.PeasyCam;
 import processing.core.PApplet;
-import toxi.geom.Vec3D;
+import processing.core.PImage;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.TriangleMesh;
 import toxi.processing.ToxiclibsSupport;
@@ -14,6 +15,8 @@ public class Choques extends PApplet {
 	TriangleMesh mesh;
 	ToxiclibsSupport gfx;
 	PeasyCam camera;
+	private ControlP5 cp5;
+	int myColor = color(255);
 
 	public void setup() {
 	  size(600,600,P3D);
@@ -21,6 +24,8 @@ public class Choques extends PApplet {
 //	  mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("mesh-flipped.stl"),STLReader.TRIANGLEMESH).flipYAxis();
 	  gfx=new ToxiclibsSupport(this);
 	  camera = new PeasyCam(this, 0, 0, 0, 50);
+	  cp5 = new ControlP5(this);
+	  
 	}
 
 	public void draw() {
