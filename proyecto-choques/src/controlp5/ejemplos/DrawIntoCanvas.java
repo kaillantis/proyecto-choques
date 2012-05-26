@@ -18,10 +18,8 @@ import processing.core.PImage;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.TriangleMesh;
 import toxi.processing.ToxiclibsSupport;
-import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.ControlWindow;
-import controlP5.ControlWindowCanvas;
 
 public class DrawIntoCanvas extends PApplet {
 	int myColorBackground = color(0, 0, 0);
@@ -44,25 +42,29 @@ public class DrawIntoCanvas extends PApplet {
 	  camera = new PeasyCam(this, 0, 0, 0, 50);
 	  cp5 = new ControlP5(this);
 	  
-
+	  controlWindow = cp5.addControlWindow("controlP5window", 100, 100, 400, 500)
+			    .hideCoordinates()
+			      .setBackground(color(40))
+			        ;
+	  
 	  // create a new button with name 'buttonA'
 	  cp5.addButton("colorA")
 	     .setValue(0)
 	     .setPosition(100,100)
-	     .setSize(200,19)
+	     .setSize(200,19).setWindow(controlWindow)
 	     ;
 	  
 	  // and add another 2 buttons
 	  cp5.addButton("colorB")
 	     .setValue(100)
 	     .setPosition(100,120)
-	     .setSize(200,19)
+	     .setSize(200,19).setWindow(controlWindow)
 	     ;
 	     
 	  cp5.addButton("colorC")
 	     .setPosition(100,140)
 	     .setSize(200,19)
-	     .setValue(0)
+	     .setValue(0).setWindow(controlWindow)
 	     ;
 
 	  PImage[] imgs = {loadImage("res/button_a.png"),loadImage("res/button_b.png"),loadImage("res/button_c.png")};
@@ -70,22 +72,19 @@ public class DrawIntoCanvas extends PApplet {
 	     .setValue(128)
 	     .setPosition(140,300)
 	     .setImages(imgs)
-	     .updateSize()
+	     .updateSize().setWindow(controlWindow)
 	     ;
 	     
 	  cp5.addButton("playAgain")
 	     .setValue(128)
 	     .setPosition(210,300)
 	     .setImages(imgs)
-	     .updateSize()
+	     .updateSize().setWindow(controlWindow)
 	     ;
 
-	  cp5 = new ControlP5(this);
+//	  cp5 = new ControlP5(this);
 
-	  controlWindow = cp5.addControlWindow("controlP5window", 100, 100, 400, 200)
-	    .hideCoordinates()
-	      .setBackground(color(40))
-	        ;
+
 
 	  cp5.addSlider("sliderValue")
 	    .setRange(0, 255)
