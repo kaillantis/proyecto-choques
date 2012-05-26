@@ -14,84 +14,120 @@ package controlp5.ejemplos;
 
 import peasy.PeasyCam;
 import processing.core.PApplet;
+import processing.core.PImage;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.TriangleMesh;
 import toxi.processing.ToxiclibsSupport;
+import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.ControlWindow;
 import controlP5.ControlWindowCanvas;
 
 public class DrawIntoCanvas extends PApplet {
+	int myColorBackground = color(0, 0, 0);
 
-	ControlP5 controlP5;
 	ControlWindow controlWindow;
-	ControlWindowCanvas cc;
-	private TriangleMesh mesh;
-	private ToxiclibsSupport gfx;
-	private PeasyCam camera;
 
-	// your controlWindowCanvas class
-	class MyCanvas extends ControlWindowCanvas {
+	public int sliderValue = 40;
+	private static final long serialVersionUID = -7144529710247863651L;
+	TriangleMesh mesh;
+	ToxiclibsSupport gfx;
+	PeasyCam camera;
+	private ControlP5 cp5;
+	int myColor = color(255);
 
-		@Override
-		public void draw(PApplet theApplet) {
-			// a rectangle will be drawn if the mouse has been
-			// pressed inside the main sketch window.
-			// mousePressed here refers to the mousePressed
-			// variable of your main sketch
-			// if (mousePressed) {
-			// theApplet.fill(255, 0, 0);
-			// theApplet.rect(10, 10, 100, 100);
-			// theApplet.fill(0);
-			// theApplet.ellipse(mouseX, mouseY, 20, 20);
-			// }
-			// will draw a rectangle into the controlWindow
-			// if the mouse has been pressed inside the controlWindow itself.
-			// theApplet.mousePressed here refers to the
-			// mousePressed variable of the controlWindow.
-			// if (theApplet.mousePressed) {
-			// theApplet.fill(0);
-			// theApplet.rect(10, 10, 100, 100);
-			// theApplet.fill(255, 0, 0);
-			// theApplet.ellipse(theApplet.mouseX, theApplet.mouseY, 20, 20);
-			// }
-
-		}
-
-	}
-
-	@Override
 	public void setup() {
-		// size(400, 400);
-		// frameRate(30);
+	  size(600,600,P3D);
+	  mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("mesh/mesh.stl"),STLReader.TRIANGLEMESH);
+//	  mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("mesh-flipped.stl"),STLReader.TRIANGLEMESH).flipYAxis();
+	  gfx=new ToxiclibsSupport(this);
+	  camera = new PeasyCam(this, 0, 0, 0, 50);
+	  cp5 = new ControlP5(this);
+	  
 
-		size(600, 600, P3D);
-		mesh = (TriangleMesh) new STLReader().loadBinary(
-				sketchPath("mesh/mesh.stl"), STLReader.TRIANGLEMESH);
-		// mesh=(TriangleMesh)new
-		// STLReader().loadBinary(sketchPath("mesh-flipped.stl"),STLReader.TRIANGLEMESH).flipYAxis();
-		gfx = new ToxiclibsSupport(this);
-		camera = new PeasyCam(this, 0, 0, 0, 50);
+	  // create a new button with name 'buttonA'
+	  cp5.addButton("colorA")
+	     .setValue(0)
+	     .setPosition(100,100)
+	     .setSize(200,19)
+	     ;
+	  
+	  // and add another 2 buttons
+	  cp5.addButton("colorB")
+	     .setValue(100)
+	     .setPosition(100,120)
+	     .setSize(200,19)
+	     ;
+	     
+	  cp5.addButton("colorC")
+	     .setPosition(100,140)
+	     .setSize(200,19)
+	     .setValue(0)
+	     ;
 
-		controlP5 = new ControlP5(this);
+	  PImage[] imgs = {loadImage("res/button_a.png"),loadImage("res/button_b.png"),loadImage("res/button_c.png")};
+	  cp5.addButton("play")
+	     .setValue(128)
+	     .setPosition(140,300)
+	     .setImages(imgs)
+	     .updateSize()
+	     ;
+	     
+	  cp5.addButton("playAgain")
+	     .setValue(128)
+	     .setPosition(210,300)
+	     .setImages(imgs)
+	     .updateSize()
+	     ;
 
-		controlWindow = controlP5.addControlWindow("controlP5window", 100, 100,
-				500, 100, 30);
-		controlWindow.setUpdateMode(ControlWindow.NORMAL);
-		//
-		// cc = new MyCanvas();
-		// cc.pre();
-		// controlWindow.addCanvas(cc);
+	  cp5 = new ControlP5(this);
 
+	  controlWindow = cp5.addControlWindow("controlP5window", 100, 100, 400, 200)
+	    .hideCoordinates()
+	      .setBackground(color(40))
+	        ;
+
+	  cp5.addSlider("sliderValue")
+	    .setRange(0, 255)
+	      .setPosition(40, 40)
+	        .setSize(200, 29)
+	          .setWindow(controlWindow)
+	            ;	  
 	}
 
-	@Override
+
 	public void draw() {
-		background(51);
-		lights();
-		noStroke();
-		gfx.mesh(mesh, false, 10);
-		this.controlP5.draw();
+		 background(sliderValue);
+		  lights();
+		  gfx.mesh(mesh,false,10);
+	  
+	}
+
+	void myTextfield(String theValue) {
+	  println(theValue);
+	}
+
+	void myWindowTextfield(String theValue) {
+	  println("from controlWindow: "+theValue);
+	}
+
+	public void keyPressed() {
+	  if (key==',') cp5.window("controlP5window").hide();
+	  if (key=='.') cp5.window("controlP5window").show();
+	  // controlWindow = controlP5.addControlWindow("controlP5window2",600,100,400,200);
+	  // controlP5.controller("sliderValue1").moveTo(controlWindow);
+
+	  if (key=='d') {
+	    if (controlWindow.isUndecorated()) {
+	      controlWindow.setUndecorated(false);
+	    } 
+	    else {
+	      controlWindow.setUndecorated(true);
+	    }
+	  }
+	  if (key=='t') {
+	    controlWindow.toggleUndecorated();
+	  }
 	}
 
 	public static void main(String _args[]) {
