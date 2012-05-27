@@ -18,12 +18,12 @@ import processing.core.PImage;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.TriangleMesh;
 import toxi.processing.ToxiclibsSupport;
+import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.ControlWindow;
 import controlP5.ControlWindowCanvas;
 
 public class DrawIntoCanvas extends PApplet {
-	private static final long serialVersionUID = -2261752365014781766L;
 
 	ControlP5 controlP5;
 	ControlWindow controlWindow;
@@ -36,10 +36,14 @@ public class DrawIntoCanvas extends PApplet {
 	class MyCanvas extends ControlWindowCanvas {
 
 		private ControlP5 cp5;
+		int myColor = color(255);
+		int c1, c2;
+		float n, n1;
 
 		@Override
 		public void setup(PApplet theApplet) {
 			super.setup(theApplet);
+			noStroke();
 			cp5 = new ControlP5(theApplet);
 			// create a new button with name 'buttonA'
 			cp5.addButton("colorA").setValue(0).setPosition(100, 100)
@@ -60,13 +64,44 @@ public class DrawIntoCanvas extends PApplet {
 
 			cp5.addButton("playAgain").setValue(128).setPosition(210, 300)
 					.setImages(imgs).updateSize();
+
 		}
 
 		@Override
 		public void draw(PApplet theApplet) {
-
+			// background(myColor);
+			myColor = lerpColor(c1, c2, n);
+			n += (1 - n) * 0.1;
 		}
 
+		public void controlEvent(ControlEvent theEvent) {
+			println(theEvent.getController().getName());
+			n = 0;
+		}
+
+		public void colorA(int theValue) {
+			println("a button event from colorA: " + theValue);
+			c1 = c2;
+			c2 = color(0, 160, 100);
+		}
+
+		public void colorB(int theValue) {
+			println("a button event from colorB: " + theValue);
+			c1 = c2;
+			c2 = color(150, 0, 0);
+		}
+
+		public void colorC(int theValue) {
+			println("a button event from colorC: " + theValue);
+			c1 = c2;
+			c2 = color(255, 255, 0);
+		}
+
+		public void play(int theValue) {
+			println("a button event from buttonB: " + theValue);
+			c1 = c2;
+			c2 = color(0, 0, 0);
+		}
 	}
 
 	@Override
@@ -77,6 +112,8 @@ public class DrawIntoCanvas extends PApplet {
 		size(600, 600, P3D);
 		mesh = (TriangleMesh) new STLReader().loadBinary(
 				sketchPath("mesh/mesh.stl"), STLReader.TRIANGLEMESH);
+		// mesh=(TriangleMesh)new
+		// STLReader().loadBinary(sketchPath("mesh-flipped.stl"),STLReader.TRIANGLEMESH).flipYAxis();
 		gfx = new ToxiclibsSupport(this);
 		camera = new PeasyCam(this, 0, 0, 0, 50);
 
@@ -89,7 +126,8 @@ public class DrawIntoCanvas extends PApplet {
 		//
 		cc = new MyCanvas();
 		cc.pre();
-		// controlWindow.addCanvas(cc);
+		controlWindow.addCanvas(cc);
+		// controlP5.addCanvas(cc);
 
 	}
 
@@ -99,7 +137,7 @@ public class DrawIntoCanvas extends PApplet {
 		lights();
 		noStroke();
 		gfx.mesh(mesh, false, 10);
-		// this.controlP5.draw();
+		this.controlP5.draw();
 	}
 
 	public static void main(String _args[]) {
