@@ -12,12 +12,16 @@ package controlp5.ejemplos;
  *
  */
 
+import javax.swing.JFileChooser;
+
 import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.core.PImage;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.TriangleMesh;
 import toxi.processing.ToxiclibsSupport;
+import controlP5.CallbackEvent;
+import controlP5.CallbackListener;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.ControlWindow;
@@ -42,12 +46,26 @@ public class DrawIntoCanvas extends PApplet {
 
 		@Override
 		public void setup(PApplet theApplet) {
+			
+			CallbackListener cb = new CallbackListener() {
+				
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
+					
+					JFileChooser fc = new JFileChooser();
+				
+					if(theEvent.getAction() == ControlP5.ACTION_PRESSED)
+						fc.showOpenDialog(theEvent.getController().getControlWindow().papplet());
+					
+				}
+			};
+			
 			super.setup(theApplet);
 			noStroke();
 			cp5 = new ControlP5(theApplet);
 			// create a new button with name 'buttonA'
 			cp5.addButton("colorA").setValue(0).setPosition(100, 100)
-					.setSize(200, 19);
+					.setSize(200, 19).addCallback(cb);
 
 			// and add another 2 buttons
 			cp5.addButton("colorB").setValue(100).setPosition(100, 120)
