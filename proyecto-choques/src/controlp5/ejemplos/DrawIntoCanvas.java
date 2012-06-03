@@ -12,7 +12,10 @@ package controlp5.ejemplos;
  *
  */
 
+import java.awt.HeadlessException;
+
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 
 import peasy.PeasyCam;
 import processing.core.PApplet;
@@ -53,9 +56,15 @@ public class DrawIntoCanvas extends PApplet {
 				public void controlEvent(CallbackEvent theEvent) {
 					
 					JFileChooser fc = new JFileChooser();
-				
+					//MeshFilter meshFilter = new MeshFilter();
+					//fc.addChoosableFileFilter(meshFilter);
 					if(theEvent.getAction() == ControlP5.ACTION_PRESSED)
-						fc.showOpenDialog(theEvent.getController().getControlWindow().papplet());
+						try{
+							fc.showOpenDialog(DrawIntoCanvas.this);
+						}catch(HeadlessException e){
+							System.out.print("paso por aca loco");
+						}
+								//theEvent.getController().getControlWindow().papplet()
 					
 				}
 			};
@@ -128,10 +137,8 @@ public class DrawIntoCanvas extends PApplet {
 		// frameRate(30);
 
 		size(600, 600, P3D);
-		mesh = (TriangleMesh) new STLReader().loadBinary(
-				sketchPath("mesh/mesh.stl"), STLReader.TRIANGLEMESH);
-		// mesh=(TriangleMesh)new
-		// STLReader().loadBinary(sketchPath("mesh-flipped.stl"),STLReader.TRIANGLEMESH).flipYAxis();
+		
+		 mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("C:/Users/Ivan/git/proyecto-choques/proyecto-choques/mesh/mesh.stl"),STLReader.TRIANGLEMESH).flipYAxis();
 		gfx = new ToxiclibsSupport(this);
 		camera = new PeasyCam(this, 0, 0, 0, 50);
 
@@ -150,11 +157,15 @@ public class DrawIntoCanvas extends PApplet {
 	}
 
 	@Override
-	public void draw() {
+	public  void draw() {
 		background(51);
 		lights();
 		noStroke();
+		try{
 		gfx.mesh(mesh, false, 10);
+		}catch(NullPointerException e){
+			e.printStackTrace();
+		}
 		this.controlP5.draw();
 	}
 
