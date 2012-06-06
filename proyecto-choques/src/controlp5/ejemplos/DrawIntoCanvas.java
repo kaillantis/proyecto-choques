@@ -138,7 +138,7 @@ public class DrawIntoCanvas extends PApplet {
 
 		size(600, 600, P3D);
 		
-		 mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("C:/Users/Ivan/git/proyecto-choques/proyecto-choques/mesh/mesh.stl"),STLReader.TRIANGLEMESH).flipYAxis();
+		 mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("/mesh/mesh.stl"),STLReader.TRIANGLEMESH).flipYAxis();
 		gfx = new ToxiclibsSupport(this);
 		camera = new PeasyCam(this, 0, 0, 0, 50);
 
