@@ -3,6 +3,7 @@
 	<name>proyecto-choques</name>
 	<comment></comment>
 	<projects>
+		<project>modulo-procesamiento</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
