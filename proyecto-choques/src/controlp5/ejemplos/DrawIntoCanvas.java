@@ -12,16 +12,14 @@ package controlp5.ejemplos;
  *
  */
 
+import java.awt.HeadlessException;
 
-
-import impactTest.PuntoMesh;
-
-import java.util.ArrayList;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 
 import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.core.PImage;
-import toxi.geom.mesh.Face;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.TriangleMesh;
 import toxi.processing.ToxiclibsSupport;
@@ -34,10 +32,6 @@ import controlP5.ControlWindowCanvas;
 
 public class DrawIntoCanvas extends PApplet {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	ControlP5 controlP5;
 	ControlWindow controlWindow;
 	ControlWindowCanvas cc;
@@ -45,8 +39,8 @@ public class DrawIntoCanvas extends PApplet {
 	private ToxiclibsSupport gfx;
 	private PeasyCam camera;
 
+	// your controlWindowCanvas class
 	class MyCanvas extends ControlWindowCanvas {
-
 
 		private ControlP5 cp5;
 		int myColor = color(255);
@@ -56,13 +50,31 @@ public class DrawIntoCanvas extends PApplet {
 		@Override
 		public void setup(PApplet theApplet) {
 			
+			CallbackListener cb = new CallbackListener() {
+				
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
+					
+					JFileChooser fc = new JFileChooser();
+					//MeshFilter meshFilter = new MeshFilter();
+					//fc.addChoosableFileFilter(meshFilter);
+					if(theEvent.getAction() == ControlP5.ACTION_PRESSED)
+						try{
+							fc.showOpenDialog(DrawIntoCanvas.this);
+						}catch(HeadlessException e){
+							System.out.print("paso por aca loco");
+						}
+								//theEvent.getController().getControlWindow().papplet()
+					
+				}
+			};
 			
 			super.setup(theApplet);
 			noStroke();
 			cp5 = new ControlP5(theApplet);
 			// create a new button with name 'buttonA'
-			cp5.addButton("Nuevo choque").setValue(0).setPosition(100, 100)
-					.setSize(200, 19);
+			cp5.addButton("colorA").setValue(0).setPosition(100, 100)
+					.setSize(200, 19).addCallback(cb);
 
 			// and add another 2 buttons
 			cp5.addButton("colorB").setValue(100).setPosition(100, 120)
@@ -118,7 +130,7 @@ public class DrawIntoCanvas extends PApplet {
 			c2 = color(0, 0, 0);
 		}
 	}
-	
+
 	@Override
 	public void setup() {
 		// size(400, 400);
@@ -126,10 +138,8 @@ public class DrawIntoCanvas extends PApplet {
 
 		size(600, 600, P3D);
 		
-		mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("C:/Users/Ivan/git/proyecto-choques/proyecto-choques/mesh/mesh.stl"),STLReader.TRIANGLEMESH).flipYAxis();
-		//this.crearArchivoIN(mesh);
+		 mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("/mesh/mesh.stl"),STLReader.TRIANGLEMESH).flipYAxis();
 		gfx = new ToxiclibsSupport(this);
-		
 		camera = new PeasyCam(this, 0, 0, 0, 50);
 
 		controlP5 = new ControlP5(this);
@@ -139,7 +149,6 @@ public class DrawIntoCanvas extends PApplet {
 		controlWindow.setUpdateMode(ControlWindow.NORMAL);
 		// controlWindow.setUpdateMode(ControlWindow.NORMAL);
 		//
-		
 		cc = new MyCanvas();
 		cc.pre();
 		controlWindow.addCanvas(cc);
@@ -147,23 +156,16 @@ public class DrawIntoCanvas extends PApplet {
 
 	}
 
-	/*private void crearArchivoIN(TriangleMesh mesh2) {
-		ArrayList<Face> carasDelMesh = mesh.faces;
-		
-		for(Face caraDeMesh : carasDelMesh){
-			new PuntoImpact(caraDeMesh.a.x,caraDeMesh.a.y,caraDeMesh.a.z);
-			
-		}
-	}*/
-
 	@Override
 	public  void draw() {
 		background(51);
 		lights();
 		noStroke();
-		
+		try{
 		gfx.mesh(mesh, false, 10);
-		
+		}catch(NullPointerException e){
+			e.printStackTrace();
+		}
 		this.controlP5.draw();
 	}
 
