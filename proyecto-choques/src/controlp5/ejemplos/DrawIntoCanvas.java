@@ -71,7 +71,6 @@ public class DrawIntoCanvas extends PApplet {
 			CallbackListener cb2 = new CallbackListener() {
 				@Override
 				public void controlEvent(CallbackEvent theEvent) {
-					
 					if (theEvent.getAction() == ControlP5.ACTION_RELEASED) {
 						noLoop();
 						javax.swing.JOptionPane.showMessageDialog(frame,"what?");
