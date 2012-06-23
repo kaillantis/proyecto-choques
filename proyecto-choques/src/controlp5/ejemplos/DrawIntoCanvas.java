@@ -54,23 +54,17 @@ public class DrawIntoCanvas extends PApplet {
 			CallbackListener cb = new CallbackListener() {
 				
 				@Override
-				public void controlEvent(CallbackEvent theEvent) {
-					noLoop();
-					final JFileChooser fc = new JFileChooser();
-					// MeshFilter meshFilter = new MeshFilter();
-					// fc.addChoosableFileFilter(meshFilter);
+				public void controlEvent(CallbackEvent theEvent) {		
 					if (theEvent.getAction() == ControlP5.ACTION_RELEASED){
-						
 						try {
 							noLoop();
+							JFileChooser fc = new JFileChooser();
 							fc.showOpenDialog(DrawIntoCanvas.this);
 							loop();
 						} catch (HeadlessException e) {
 							System.out.print("paso por aca loco");
 						}
 					}
-					// theEvent.getController().getControlWindow().papplet()
-					loop();
 				}
 			};
 			
