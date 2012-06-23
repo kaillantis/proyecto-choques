@@ -57,18 +57,34 @@ public class DrawIntoCanvas extends PApplet {
 				
 				@Override
 				public void controlEvent(CallbackEvent theEvent) {
-					
-					JFileChooser fc = new JFileChooser();
-					//MeshFilter meshFilter = new MeshFilter();
-					//fc.addChoosableFileFilter(meshFilter);
-					if(theEvent.getAction() == ControlP5.ACTION_PRESSED)
-						try{
+					noLoop();
+					final JFileChooser fc = new JFileChooser();
+					// MeshFilter meshFilter = new MeshFilter();
+					// fc.addChoosableFileFilter(meshFilter);
+					if (theEvent.getAction() == ControlP5.ACTION_PRESSED){
+						
+						try {
+							noLoop();
 							fc.showOpenDialog(DrawIntoCanvas.this);
-						}catch(HeadlessException e){
+							loop();
+						} catch (HeadlessException e) {
 							System.out.print("paso por aca loco");
 						}
-								//theEvent.getController().getControlWindow().papplet()
+					}
+					// theEvent.getController().getControlWindow().papplet()
+					loop();
+				}
+			};
+			
+			CallbackListener cb2 = new CallbackListener() {
+				@Override
+				public void controlEvent(CallbackEvent theEvent) {
 					
+					if (theEvent.getAction() == ControlP5.ACTION_RELEASED) {
+						noLoop();
+						javax.swing.JOptionPane.showMessageDialog(frame,"what?");
+						loop();
+					}
 				}
 			};
 			
@@ -81,7 +97,7 @@ public class DrawIntoCanvas extends PApplet {
 
 			// and add another 2 buttons
 			cp5.addButton("colorB").setValue(100).setPosition(100, 120)
-					.setSize(200, 19);
+					.setSize(200, 19).addCallback(cb2);
 
 			cp5.addButton("colorC").setPosition(100, 140).setSize(200, 19)
 					.setValue(0);
@@ -99,39 +115,45 @@ public class DrawIntoCanvas extends PApplet {
 
 		@Override
 		public void draw(PApplet theApplet) {
-			// background(myColor);
-			myColor = lerpColor(c1, c2, n);
-			n += (1 - n) * 0.1;
+//			theApplet.draw();
+			
 		}
 
-		public void controlEvent(ControlEvent theEvent) {
-			println(theEvent.getController().getName());
-			n = 0;
-		}
+//		@Override
+//		public void draw(PApplet theApplet) {
+//			// background(myColor);
+//			myColor = lerpColor(c1, c2, n);
+//			n += (1 - n) * 0.1;
+//		}
 
-		public void colorA(int theValue) {
-			println("a button event from colorA: " + theValue);
-			c1 = c2;
-			c2 = color(0, 160, 100);
-		}
+//		public void controlEvent(ControlEvent theEvent) {
+//			println(theEvent.getController().getName());
+//			n = 0;
+//		}
 
-		public void colorB(int theValue) {
-			println("a button event from colorB: " + theValue);
-			c1 = c2;
-			c2 = color(150, 0, 0);
-		}
-
-		public void colorC(int theValue) {
-			println("a button event from colorC: " + theValue);
-			c1 = c2;
-			c2 = color(255, 255, 0);
-		}
-
-		public void play(int theValue) {
-			println("a button event from buttonB: " + theValue);
-			c1 = c2;
-			c2 = color(0, 0, 0);
-		}
+//		public void colorA(int theValue) {
+//			println("a button event from colorA: " + theValue);
+//			c1 = c2;
+//			c2 = color(0, 160, 100);
+//		}
+//
+//		public void colorB(int theValue) {
+//			println("a button event from colorB: " + theValue);
+//			c1 = c2;
+//			c2 = color(150, 0, 0);
+//		}
+//
+//		public void colorC(int theValue) {
+//			println("a button event from colorC: " + theValue);
+//			c1 = c2;
+//			c2 = color(255, 255, 0);
+//		}
+//
+//		public void play(int theValue) {
+//			println("a button event from buttonB: " + theValue);
+//			c1 = c2;
+//			c2 = color(0, 0, 0);
+//		}
 	}
 
 	@Override
@@ -154,7 +176,7 @@ public class DrawIntoCanvas extends PApplet {
 		// controlWindow.setUpdateMode(ControlWindow.NORMAL);
 		//
 		cc = new MyCanvas();
-//		cc.pre();
+		cc.post();
 		controlWindow.addCanvas(cc);
 		// controlP5.addCanvas(cc);
 
@@ -170,6 +192,7 @@ public class DrawIntoCanvas extends PApplet {
 		mesh();
 
 		this.controlP5.draw();
+//		System.out.print("DRAW");
 	}
 
 	private void mesh() {
@@ -177,6 +200,7 @@ public class DrawIntoCanvas extends PApplet {
 		
 		Vec3D colAmp=new Vec3D(400, 200, 200);
 		Vec3D newColAmp=new Vec3D(1, 400, 1500);
+		Vec3D neuColAmp=new Vec3D(255, 100, 100);
 		int num=mesh.getNumFaces();
 		  mesh.computeVertexNormals();
 		  for(int i=0; i<num; i++) {
@@ -188,12 +212,12 @@ public class DrawIntoCanvas extends PApplet {
 		    normal(f.a.normal.x,f.a.normal.y,f.a.normal.z);
 		    vertex(f.a);
 		    if (i == 50)
-		    	col = f.b.add(newColAmp);
+		    	col = f.b.add(neuColAmp.scaleSelf((float) 0.5));
 		    fill(col.x,col.y,col.z);
 		    normal(f.b.normal.x,f.b.normal.y,f.b.normal.z);
 		    vertex(f.b);
 		    if (i == 50)
-		    	col = f.c.add(newColAmp);
+		    	col = f.c.add(colAmp);
 		    fill(col.x,col.y,col.z);
 		    normal(f.c.normal.x,f.c.normal.y,f.c.normal.z);
 		    vertex(f.c);
@@ -203,7 +227,7 @@ public class DrawIntoCanvas extends PApplet {
 
 	}
 	
-	  private void normal(Vec3D v) {
+	 private void normal(Vec3D v) {
 		  normal(v.x,v.y,v.z);
 		}
 		 
