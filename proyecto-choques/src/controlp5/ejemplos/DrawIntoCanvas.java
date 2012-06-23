@@ -13,6 +13,7 @@ package controlp5.ejemplos;
  */
 
 import java.awt.Color;
+import java.awt.Frame;
 import java.awt.HeadlessException;
 
 import javax.swing.JFileChooser;
@@ -51,29 +52,32 @@ public class DrawIntoCanvas extends PApplet {
 		@Override
 		public void setup(PApplet theApplet) {
 			
-			CallbackListener cb = new CallbackListener() {
-				
-				@Override
-				public void controlEvent(CallbackEvent theEvent) {		
-					if (theEvent.getAction() == ControlP5.ACTION_RELEASED){
-						try {
-							noLoop();
-							JFileChooser fc = new JFileChooser();
-							fc.showOpenDialog(DrawIntoCanvas.this);
-							loop();
-						} catch (HeadlessException e) {
-							System.out.print("paso por aca loco");
-						}
-					}
-				}
-			};
+//			CallbackListener cb = new CallbackListener() {
+//				
+//				@Override
+//				public void controlEvent(CallbackEvent theEvent) {		
+//					if (theEvent.getAction() == ControlP5.ACTION_RELEASED){
+//						try {
+//							noLoop();
+//							JFileChooser fc = new JFileChooser();
+//							fc.showOpenDialog(new Frame());
+//							loop();
+//						} catch (HeadlessException e) {
+//							System.out.print("paso por aca loco");
+//						}
+//					}
+//				}
+//			};
 			
 			CallbackListener cb2 = new CallbackListener() {
 				@Override
 				public void controlEvent(CallbackEvent theEvent) {
 					if (theEvent.getAction() == ControlP5.ACTION_RELEASED) {
+						System.out.print("Before noLoop\n");
 						noLoop();
-						javax.swing.JOptionPane.showMessageDialog(frame,"what?");
+						System.out.print("Before frame\n");
+						javax.swing.JOptionPane.showMessageDialog(new Frame(),"what?");
+						System.out.print("Before loop\n");
 						loop();
 					}
 				}
@@ -84,7 +88,7 @@ public class DrawIntoCanvas extends PApplet {
 			cp5 = new ControlP5(theApplet);
 			// create a new button with name 'buttonA'
 			cp5.addButton("colorA").setValue(0).setPosition(100, 100)
-					.setSize(200, 19).addCallback(cb);
+					.setSize(200, 19);//.addCallback(cb);
 
 			// and add another 2 buttons
 			cp5.addButton("colorB").setValue(100).setPosition(100, 120)
@@ -109,42 +113,6 @@ public class DrawIntoCanvas extends PApplet {
 //			theApplet.draw();
 			
 		}
-
-//		@Override
-//		public void draw(PApplet theApplet) {
-//			// background(myColor);
-//			myColor = lerpColor(c1, c2, n);
-//			n += (1 - n) * 0.1;
-//		}
-
-//		public void controlEvent(ControlEvent theEvent) {
-//			println(theEvent.getController().getName());
-//			n = 0;
-//		}
-
-//		public void colorA(int theValue) {
-//			println("a button event from colorA: " + theValue);
-//			c1 = c2;
-//			c2 = color(0, 160, 100);
-//		}
-//
-//		public void colorB(int theValue) {
-//			println("a button event from colorB: " + theValue);
-//			c1 = c2;
-//			c2 = color(150, 0, 0);
-//		}
-//
-//		public void colorC(int theValue) {
-//			println("a button event from colorC: " + theValue);
-//			c1 = c2;
-//			c2 = color(255, 255, 0);
-//		}
-//
-//		public void play(int theValue) {
-//			println("a button event from buttonB: " + theValue);
-//			c1 = c2;
-//			c2 = color(0, 0, 0);
-//		}
 	}
 
 	@Override
@@ -163,9 +131,8 @@ public class DrawIntoCanvas extends PApplet {
 
 		controlWindow = controlP5.addControlWindow("controlP5window", 100, 100,
 				width, height, 30);
-		controlWindow.setUpdateMode(ControlWindow.NORMAL);
+//		controlWindow.setUpdateMode(ControlWindow.NORMAL);
 		// controlWindow.setUpdateMode(ControlWindow.NORMAL);
-		//
 		cc = new MyCanvas();
 		cc.post();
 		controlWindow.addCanvas(cc);
