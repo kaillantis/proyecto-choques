@@ -12,14 +12,17 @@ package controlp5.ejemplos;
  *
  */
 
+import java.awt.Color;
 import java.awt.HeadlessException;
 
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
 
 import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.core.PImage;
+import toxi.color.TColor;
+import toxi.geom.Vec3D;
+import toxi.geom.mesh.Face;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.TriangleMesh;
 import toxi.processing.ToxiclibsSupport;
@@ -135,10 +138,11 @@ public class DrawIntoCanvas extends PApplet {
 	public void setup() {
 		// size(400, 400);
 		// frameRate(30);
-
+		Color col = new Color(31);
+		
 		size(600, 600, P3D);
 		
-		 mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("/mesh/mesh.stl"),STLReader.TRIANGLEMESH).flipYAxis();
+		mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("/mesh/mesh.stl"),STLReader.TRIANGLEMESH).flipYAxis();
 		gfx = new ToxiclibsSupport(this);
 		camera = new PeasyCam(this, 0, 0, 0, 50);
 
@@ -150,24 +154,62 @@ public class DrawIntoCanvas extends PApplet {
 		// controlWindow.setUpdateMode(ControlWindow.NORMAL);
 		//
 		cc = new MyCanvas();
-		cc.pre();
+//		cc.pre();
 		controlWindow.addCanvas(cc);
 		// controlP5.addCanvas(cc);
 
 	}
-
+	
 	@Override
-	public  void draw() {
+	public void draw() {
 		background(51);
 		lights();
 		noStroke();
-		try{
-		gfx.mesh(mesh, false, 10);
-		}catch(NullPointerException e){
-			e.printStackTrace();
-		}
+//		gfx.mesh(mesh, false, 10);
+
+		mesh();
+
 		this.controlP5.draw();
 	}
+
+	private void mesh() {
+		beginShape(TRIANGLES);
+		
+		Vec3D colAmp=new Vec3D(400, 200, 200);
+		Vec3D newColAmp=new Vec3D(1, 400, 1500);
+		int num=mesh.getNumFaces();
+		  mesh.computeVertexNormals();
+		  for(int i=0; i<num; i++) {
+		    Face f=mesh.faces.get(i);
+		    Vec3D col=f.a.add(colAmp).scaleSelf((float) 0.5);
+		    if (i == 50)
+		    	col = f.a.add(newColAmp);
+		    fill(col.x,col.y,col.z);
+		    normal(f.a.normal.x,f.a.normal.y,f.a.normal.z);
+		    vertex(f.a);
+		    if (i == 50)
+		    	col = f.b.add(newColAmp);
+		    fill(col.x,col.y,col.z);
+		    normal(f.b.normal.x,f.b.normal.y,f.b.normal.z);
+		    vertex(f.b);
+		    if (i == 50)
+		    	col = f.c.add(newColAmp);
+		    fill(col.x,col.y,col.z);
+		    normal(f.c.normal.x,f.c.normal.y,f.c.normal.z);
+		    vertex(f.c);
+		    
+		  }
+			endShape();
+
+	}
+	
+	  private void normal(Vec3D v) {
+		  normal(v.x,v.y,v.z);
+		}
+		 
+	private void vertex(Vec3D v) {
+		  vertex(v.x,v.y,v.z);
+		}
 
 	public static void main(String _args[]) {
 		PApplet.main(new String[] { controlp5.ejemplos.DrawIntoCanvas.class

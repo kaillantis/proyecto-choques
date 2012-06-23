@@ -6,7 +6,6 @@ import java.io.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
-import com.stevesoft.pat.Regex;
 
 public class PuntoMesh {
 
