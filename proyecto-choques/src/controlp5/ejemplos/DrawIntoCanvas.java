@@ -20,7 +20,6 @@ import javax.swing.JFileChooser;
 import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.core.PImage;
-import toxi.color.TColor;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.Face;
 import toxi.geom.mesh.STLReader;
@@ -28,7 +27,6 @@ import toxi.geom.mesh.TriangleMesh;
 import toxi.processing.ToxiclibsSupport;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
-import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.ControlWindow;
 import controlP5.ControlWindowCanvas;
@@ -61,7 +59,7 @@ public class DrawIntoCanvas extends PApplet {
 					final JFileChooser fc = new JFileChooser();
 					// MeshFilter meshFilter = new MeshFilter();
 					// fc.addChoosableFileFilter(meshFilter);
-					if (theEvent.getAction() == ControlP5.ACTION_PRESSED){
+					if (theEvent.getAction() == ControlP5.ACTION_RELEASED){
 						
 						try {
 							noLoop();
@@ -185,7 +183,7 @@ public class DrawIntoCanvas extends PApplet {
 	@Override
 	public void draw() {
 		background(51);
-		lights();
+//		lights();
 		noStroke();
 //		gfx.mesh(mesh, false, 10);
 
@@ -234,7 +232,8 @@ public class DrawIntoCanvas extends PApplet {
 	private void vertex(Vec3D v) {
 		  vertex(v.x,v.y,v.z);
 		}
-
+	
+	
 	public static void main(String _args[]) {
 		PApplet.main(new String[] { controlp5.ejemplos.DrawIntoCanvas.class
 				.getName() });
