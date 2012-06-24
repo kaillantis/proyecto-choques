@@ -12,11 +12,7 @@ package controlp5.ejemplos;
  *
  */
 
-import java.awt.Color;
 import java.awt.Frame;
-import java.awt.HeadlessException;
-
-import javax.swing.JFileChooser;
 
 import peasy.PeasyCam;
 import processing.core.PApplet;
@@ -53,18 +49,16 @@ public class DrawIntoCanvas extends PApplet {
 		public void setup(PApplet theApplet) {
 			
 //			CallbackListener cb = new CallbackListener() {
-//				
 //				@Override
 //				public void controlEvent(CallbackEvent theEvent) {		
 //					if (theEvent.getAction() == ControlP5.ACTION_RELEASED){
-//						try {
+//							System.out.print("Before noLoop\n");
 //							noLoop();
 //							JFileChooser fc = new JFileChooser();
-//							fc.showOpenDialog(new Frame());
+//							System.out.print("Before frame\n");
+//							fc.showOpenDialog(DrawIntoCanvas.this);
+//							System.out.print("Before loop\n");
 //							loop();
-//						} catch (HeadlessException e) {
-//							System.out.print("paso por aca loco");
-//						}
 //					}
 //				}
 //			};
@@ -73,11 +67,11 @@ public class DrawIntoCanvas extends PApplet {
 				@Override
 				public void controlEvent(CallbackEvent theEvent) {
 					if (theEvent.getAction() == ControlP5.ACTION_RELEASED) {
-						System.out.print("Before noLoop\n");
+
 						noLoop();
-						System.out.print("Before frame\n");
+						
 						javax.swing.JOptionPane.showMessageDialog(new Frame(),"what?");
-						System.out.print("Before loop\n");
+						
 						loop();
 					}
 				}
@@ -119,7 +113,7 @@ public class DrawIntoCanvas extends PApplet {
 	public void setup() {
 		// size(400, 400);
 		// frameRate(30);
-		Color col = new Color(31);
+//		Color col = new Color(31);
 		
 		size(600, 600, P3D);
 		
@@ -167,17 +161,17 @@ public class DrawIntoCanvas extends PApplet {
 		    if (i == 50)
 		    	col = f.a.add(newColAmp);
 		    fill(col.x,col.y,col.z);
-		    normal(f.a.normal.x,f.a.normal.y,f.a.normal.z);
+//		    normal(f.a.normal.x,f.a.normal.y,f.a.normal.z);
 		    vertex(f.a);
 		    if (i == 50)
 		    	col = f.b.add(neuColAmp.scaleSelf((float) 0.5));
 		    fill(col.x,col.y,col.z);
-		    normal(f.b.normal.x,f.b.normal.y,f.b.normal.z);
+//		    normal(f.b.normal.x,f.b.normal.y,f.b.normal.z);
 		    vertex(f.b);
 		    if (i == 50)
 		    	col = f.c.add(colAmp);
 		    fill(col.x,col.y,col.z);
-		    normal(f.c.normal.x,f.c.normal.y,f.c.normal.z);
+//		    normal(f.c.normal.x,f.c.normal.y,f.c.normal.z);
 		    vertex(f.c);
 		    
 		  }
@@ -192,6 +186,7 @@ public class DrawIntoCanvas extends PApplet {
 	private void vertex(Vec3D v) {
 		  vertex(v.x,v.y,v.z);
 		}
+	
 	
 	
 	public static void main(String _args[]) {
