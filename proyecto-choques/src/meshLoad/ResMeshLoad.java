@@ -55,39 +55,52 @@ public class ResMeshLoad extends PApplet {
 		System.out.print("\nNode size: " + db_node.size());
 		System.out.print("\nElem size: " + db_element.size());
 		
-//		for (Entry entry: db_element.entrySet()){
-//			print(entry.getKey().toString()+"\n");
-//			print(entry.getValue().toString()+"\n");
-//		}
+		for (Entry entry: db_element.entrySet()){
+			print(entry.getKey().toString()+"\n");
+			print(entry.getValue().toString()+"\n");
+		}
 		
-		size(600, 600, P2D);
+		size(600, 600, OPENGL);
 		readMesh();
-//		camera = new PeasyCam(this, 0, 0, 0, 50);
+		camera = new PeasyCam(this, 0, 0, 0, 50);
 		
 	}
 
 	private void drawMesh() {
-		for (Line line : vLines) {
-			beginShape(LINE);
-			vertex(line.point1.toArray());
-			vertex(line.point2.toArray());
-			endShape();
-		}
-		for (Triangle triangle: vTriangle) {
-			beginShape(TRIANGLE);
-			vertex(triangle.point1.toArray());
-			vertex(triangle.point2.toArray());
-			vertex(triangle.point3.toArray());
-			endShape();
-		}
+		drawLines();
+		drawTriangles();
 		
 	}
+	
 
+	private void drawTriangles() {
+		beginShape(TRIANGLES);
+		for (Triangle triangle: vTriangle) {
+			vertex(triangle.point1);
+			vertex(triangle.point2);
+			vertex(triangle.point3);
+		}
+		endShape();
+	}
+
+	private void drawLines() {
+		beginShape(LINES);
+		for (Line line : vLines) {
+			vertex(line.point1.toArray());
+			vertex(line.point2.toArray());
+		}
+		endShape();
+	}
+
+	private void vertex(Vec3D v) {
+		  vertex(v.x,v.y,v.z);
+	}
+	
 	@Override
 	public void draw() {
 		background(51);
-//		lights();
-		noStroke();
+		lights();
+//		noStroke();
 		drawMesh();
 	}
 
@@ -106,7 +119,7 @@ public class ResMeshLoad extends PApplet {
             Vec3D p2 = db_node.get(arr[1]+"");
             Vec3D p3 = db_node.get(arr[1]+"");
             vTriangle.add(new Triangle(p1, p2, p3));
-            print("\nReading mesh");
+//            print("\nReading mesh");
         }
         	
         }
