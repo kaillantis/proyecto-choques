@@ -20,8 +20,8 @@ package controlP5;
  * Boston, MA 02111-1307 USA
  *
  * @author 		Andreas Schlegel (http://www.sojamo.de)
- * @modified	05/22/2012
- * @version		0.7.3
+ * @modified	05/30/2012
+ * @version		0.7.5
  *
  */
 
@@ -500,7 +500,6 @@ public class ControlFont {
 
 		@Override
 		public void draw(PApplet theApplet, Label theLabel) {
-			System.out.println(size);
 			theApplet.textFont(pfont, size);
 			theApplet.fill(0xffff0000); //theLabel.getColor()
 			if (theLabel.isMultiline()) {

@@ -19,7 +19,7 @@ public class Choques extends PApplet {
 	int myColor = color(255);
 
 	public void setup() {
-	  size(600,600,P3D);
+	  size(600,600,OPENGL);
 	  mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("mesh/mesh.stl"),STLReader.TRIANGLEMESH);
 //	  mesh=(TriangleMesh)new STLReader().loadBinary(sketchPath("mesh-flipped.stl"),STLReader.TRIANGLEMESH).flipYAxis();
 	  gfx=new ToxiclibsSupport(this);
@@ -78,7 +78,7 @@ public class Choques extends PApplet {
 	  noStroke();
 //	  gfx.mesh(mesh,false,10);
 //	  gfx.mesh(mesh);
-	  cp5.draw();
+//	  cp5.draw();
 	}
 	public static void main(String _args[]) {
 		PApplet.main(new String[] { choques.Choques.class.getName() });

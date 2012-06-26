@@ -27,8 +27,8 @@ import processing.core.PImage;
  * Boston, MA 02111-1307 USA
  *
  * @author 		Andreas Schlegel (http://www.sojamo.de)
- * @modified	05/22/2012
- * @version		0.7.3
+ * @modified	05/30/2012
+ * @version		0.7.5
  *
  */
 
@@ -47,6 +47,20 @@ public class CheckBox extends ControlGroup<CheckBox> {
 
 	private String _myPlugName;
 
+	/**
+	 * Convenience constructor to extend CheckBox.
+	 * 
+	 * @example use/ControlP5extendController
+	 * @param theControlP5
+	 * @param theName
+	 */
+	public CheckBox(ControlP5 theControlP5, String theName) {
+		this(theControlP5, theControlP5.getDefaultTab(), theName, 0, 0);
+		 theControlP5.register(theControlP5.papplet, theName, this);
+	}
+
+
+	
 	/**
 	 * A CheckBox should only be added to controlP5 by using controlP5.addCheckBox()
 	 * 

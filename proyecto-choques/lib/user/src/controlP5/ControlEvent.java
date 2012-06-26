@@ -20,8 +20,8 @@ package controlP5;
  * Boston, MA 02111-1307 USA
  *
  * @author 		Andreas Schlegel (http://www.sojamo.de)
- * @modified	05/22/2012
- * @version		0.7.3
+ * @modified	05/30/2012
+ * @version		0.7.5
  *
  */
 
@@ -35,14 +35,6 @@ package controlP5;
  */
 public class ControlEvent {
 
-	protected final ControllerInterface<?> _myController;
-
-	protected boolean isTab;
-
-	protected boolean isController;
-
-	protected boolean isGroup;
-
 	public static int UNDEFINDED = -1;
 
 	public static int CONTROLLER = 0;
@@ -50,6 +42,14 @@ public class ControlEvent {
 	public static int TAB = 1;
 
 	public static int GROUP = 2;
+
+	protected final ControllerInterface<?> _myController;
+
+	protected boolean isTab;
+
+	protected boolean isController;
+
+	protected boolean isGroup;
 
 	protected int myAction;
 
@@ -318,5 +318,9 @@ public class ControlEvent {
 	 */
 	@Deprecated public Tab tab() {
 		return getTab();
+	}
+	
+	public String toString() {
+		return "[ ControlEvent from:"+_myController.getClass().getSimpleName()+" value:"+getValue()+" name:"+getName()+" ]";
 	}
 }
