@@ -55,10 +55,10 @@ public class ResMeshLoad extends PApplet {
 		System.out.print("\nNode size: " + db_node.size());
 		System.out.print("\nElem size: " + db_element.size());
 		
-		for (Entry entry: db_element.entrySet()){
-			print(entry.getKey().toString()+"\n");
-			print(entry.getValue().toString()+"\n");
-		}
+//		for (Entry entry: db_element.entrySet()){
+//			print(entry.getKey().toString()+"\n");
+//			print(entry.getValue().toString()+"\n");
+//		}
 		
 		size(600, 600, OPENGL);
 		readMesh();
