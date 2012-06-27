@@ -1,46 +1,47 @@
 package proyecto;
 
-import controlP5.CallbackEvent;
+import processing.core.PApplet;
 import controlP5.CallbackListener;
+import controlP5.ControlFont;
 import controlP5.ControlP5;
 import controlP5.Controller;
 import controlP5.ControllerInterface;
-import processing.core.PApplet;
+import controlP5.Label;
+import controlP5.Textlabel;
 
 public class Main extends PApplet {
 	private static final long serialVersionUID = -7427606310430827788L;
-	
-	public enum Phase {
-		START, PRE, POST;
-	}
 
-	public Phase pantalla = Phase.START;
 	public ControlP5 cp5;
+	private ScreenPhase currentScreenPhase;
+	ControlFont defaultFont=new ControlFont(createFont("Arial",20));
 
 	@Override
 	public void setup() {
-		size(600, 600, OPENGL);
+		size(1280, 720, OPENGL);
 		cp5 = new ControlP5(this);
+//		ControlFont.RENDER_2X = true;
+				
 		drawStartScreen();
 	}
 	
 	private void drawStartScreen() {
-		new StartScreen(this);
+		currentScreenPhase = new StartScreen(this);
+		changeScreen(currentScreenPhase);
 	}
-
-	private void drawPreScreen() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void drawPostScreen() {
-		// TODO Auto-generated method stub
-		
+	
+	public void changeScreen(ScreenPhase phase){
+//		noLoop();
+		this.clearScreen();
+		phase.setup();
+		currentScreenPhase = phase;
+//		loop();
 	}
 
 	@Override
 	public void draw() {
-		background(0);
+		currentScreenPhase.drawScreen();
+//		print("draw");
 	}
 	
 	public static void main(String _args[]) {
@@ -48,9 +49,39 @@ public class Main extends PApplet {
 	}
 	
 	public void clearScreen(){
-		for (ControllerInterface<?> controller: cp5.getControllerList()){
+		for (ControllerInterface<?> controller: cp5.getAll()){
 			controller.remove();
 		}
 	}
 	
+	public void addButton(String text, int width, int height, int posX, int posY){
+		cp5.addButton(text).
+			setSize(width, height)
+			.setPosition(posX, posY)
+			.getCaptionLabel().setFont(defaultFont).toUpperCase(false);
+	}
+	
+	public void addButton(String text, int width, int height, int posX, int posY, CallbackListener listener){
+		cp5.addButton(text).
+			setSize(width, height)
+			.setPosition(posX, posY)
+			.addCallback(listener)
+			.getCaptionLabel().setFont(defaultFont).toUpperCase(false);
+	}
+	
+	public void setTitle(String title){
+		Textlabel myTextlabelA = cp5.addTextlabel("label")
+                .setText(title)
+                .setColorValue(0xffffff00)
+                .setFont(ControlP5.grixel)
+                ;
+		myTextlabelA.setSize(1280, 30);
+//		print(getTextWidth(myTextlabelA));
+//        myTextlabelA.setPosition((640 -(getTextWidth(myTextlabelA)/2)), 0);
+	}
+	
+	public int getTextWidth(Controller<?> controller){
+//		System.out.print("\n" + ControlFont.getWidthFor(controller.getStringValue(), controller.getCaptionLabel(), this));
+		return ControlFont.getWidthFor(controller.getStringValue(), controller.getCaptionLabel(), this);
+	}
 }

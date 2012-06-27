@@ -15,8 +15,8 @@ public class OpenPreScreenListener implements CallbackListener {
 	@Override
 	public void controlEvent(CallbackEvent theEvent) {
 		if (theEvent.getAction() == ControlP5.ACTION_RELEASED) {
-			System.out.print("Presione!");
-			new PreScreen(screen);
+//			System.out.print("Presione!");
+			screen.changeScreen(new PreScreen(screen));
 		}
 	}
 	

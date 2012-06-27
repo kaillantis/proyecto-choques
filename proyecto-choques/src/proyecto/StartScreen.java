@@ -1,28 +1,36 @@
 package proyecto;
 
+import controlP5.Button;
 import controlP5.ControlFont;
-import controlP5.Group;
 
-public class StartScreen {
+public class StartScreen implements ScreenPhase {
 	private Main screen;
 
 	public StartScreen(Main screen) {
 		this.screen = screen;
-		ControlFont cf1 = new ControlFont(screen.createFont("Arial",20));
+
+	}
+
+	@Override
+	public void drawScreen() {
+		screen.background(0);		
+	}
+
+	@Override
+	public void setup() {
+		screen.addButton("Nueva Simulacion", 200, 25, 250, 200, new OpenPreScreenListener(screen));
 		
-		screen.clearScreen();
+//		Button b = screen.cp5.addButton("Nueva Simulacion")
+//			.setPosition(100, 120)
+//			.addCallback(new OpenPreScreenListener(screen));
+//			
+//		b.getCaptionLabel().setFont(cf1).toUpperCase(false);
+//		b.getCaptionLabel().setPadding(10, 10);
+//		b.getCaptionLabel().setFixedSize(true);
+//		b.setWidth(ControlFont.getWidthFor("Nueva Simulacion", b.getCaptionLabel(), screen)+ 20);
+//		System.out.print(ControlFont.getWidthFor("Nueva Simulacion", b.getCaptionLabel(), screen));
 		
-		screen.cp5.addButton("Nueva Simulacion")
-			.setValue(100)
-			.setPosition(100, 120)
-			.setSize(200, 19)
-			.addCallback(new OpenPreScreenListener(screen))
-			.getCaptionLabel().setFont(cf1);
-		
-		screen.cp5.addButton("Ver resultados")
-			.setValue(100)
-			.setPosition(100, 220)
-			.setSize(200, 19)
-			.getCaptionLabel().setFont(cf1);
+		screen.addButton("Ver resultados", 200, 25, 250, 250);
+		screen.setTitle("Pantala principal");
 	}
 }

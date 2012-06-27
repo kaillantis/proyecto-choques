@@ -15,7 +15,7 @@ public class OpenStartScreenListener implements CallbackListener {
 	@Override
 	public void controlEvent(CallbackEvent theEvent) {
 		if (theEvent.getAction() == ControlP5.ACTION_RELEASED) {
-			new StartScreen(screen);
+			screen.changeScreen(new StartScreen(screen));
 		}
 	}
 
