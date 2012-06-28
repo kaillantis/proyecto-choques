@@ -14,11 +14,12 @@ public class StartScreen implements ScreenPhase {
 	@Override
 	public void drawScreen() {
 		screen.background(0);		
+//		screen.cp5.draw();
 	}
 
 	@Override
 	public void setup() {
-		screen.addButton("Nueva Simulacion", 200, 25, 250, 200, new OpenPreScreenListener(screen));
+		screen.addButton("Nueva simulacion", 200, 25, 250, 200, new OpenPreScreenListener(screen));
 		
 //		Button b = screen.cp5.addButton("Nueva Simulacion")
 //			.setPosition(100, 120)
@@ -30,7 +31,15 @@ public class StartScreen implements ScreenPhase {
 //		b.setWidth(ControlFont.getWidthFor("Nueva Simulacion", b.getCaptionLabel(), screen)+ 20);
 //		System.out.print(ControlFont.getWidthFor("Nueva Simulacion", b.getCaptionLabel(), screen));
 		
+		screen.cp5.setAutoDraw(true);
 		screen.addButton("Ver resultados", 200, 25, 250, 250);
 		screen.setTitle("Pantala principal");
+		
+	}
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+		
 	}
 }

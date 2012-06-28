@@ -3,6 +3,7 @@ package proyecto;
 import processing.core.PApplet;
 import controlP5.CallbackListener;
 import controlP5.ControlFont;
+import controlP5.ControlListener;
 import controlP5.ControlP5;
 import controlP5.Controller;
 import controlP5.ControllerInterface;
@@ -15,10 +16,12 @@ public class Main extends PApplet {
 	public ControlP5 cp5;
 	private ScreenPhase currentScreenPhase;
 	ControlFont defaultFont=new ControlFont(createFont("Arial",20));
+	ControlFont smallFont=new ControlFont(createFont("Arial",14));
 
 	@Override
 	public void setup() {
 		size(1280, 720, OPENGL);
+//		size(1280, 720, P3D);
 		cp5 = new ControlP5(this);
 //		ControlFont.RENDER_2X = true;
 				
@@ -31,11 +34,12 @@ public class Main extends PApplet {
 	}
 	
 	public void changeScreen(ScreenPhase phase){
-//		noLoop();
+		noLoop();
+		currentScreenPhase.destroy();
 		this.clearScreen();
 		phase.setup();
 		currentScreenPhase = phase;
-//		loop();
+		loop();
 	}
 
 	@Override
@@ -69,6 +73,24 @@ public class Main extends PApplet {
 			.getCaptionLabel().setFont(defaultFont).toUpperCase(false);
 	}
 	
+	public void addButton(String text, int width, int height, int posX,	int posY, ControlListener listener) {
+		cp5.addButton(text).
+		setSize(width, height)
+		.setPosition(posX, posY)
+		.addListener(listener)
+		.getCaptionLabel().setFont(defaultFont).toUpperCase(false);
+	}
+	
+	public void addSlider(String varname,String title, int width, int height, int posX, int posY, float min, float max, ControlListener listener){
+		cp5.addSlider(varname)
+			.setCaptionLabel(title)
+			.setSize(width, height)
+			.setPosition(posX, posY)
+			.setRange(min, max)
+			.addListener(listener)
+			.getCaptionLabel().setFont(smallFont).toUpperCase(false);
+	}
+	
 	public void setTitle(String title){
 		Textlabel myTextlabelA = cp5.addTextlabel("label")
                 .setText(title)
@@ -84,4 +106,6 @@ public class Main extends PApplet {
 //		System.out.print("\n" + ControlFont.getWidthFor(controller.getStringValue(), controller.getCaptionLabel(), this));
 		return ControlFont.getWidthFor(controller.getStringValue(), controller.getCaptionLabel(), this);
 	}
+
+
 }

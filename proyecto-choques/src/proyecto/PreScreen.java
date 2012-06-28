@@ -1,20 +1,28 @@
 package proyecto;
 
+import org.apache.tools.ant.taskdefs.Sleep;
+
 import peasy.PeasyCam;
+import processing.core.PGraphics3D;
+import processing.core.PMatrix3D;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.Face;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.TriangleMesh;
 import controlP5.CallbackEvent;
 import controlP5.CallbackListener;
+import controlP5.ControlEvent;
+import controlP5.ControlListener;
 import controlP5.ControlP5;
 
 
-public class PreScreen implements ScreenPhase{
+public class PreScreen implements ScreenPhase, ControlListener{
 	private Main screen;
 	TriangleMesh mesh;
-	private PeasyCam camera;
-
+	private static PeasyCam camera = null;
+	float posX = 0;
+	String file = "";
+	
 	public PreScreen(Main screen) {
 		this.screen = screen;		
 	}
@@ -22,13 +30,25 @@ public class PreScreen implements ScreenPhase{
 	@Override
 	public void drawScreen() {
 		screen.background(51);
-		screen.noStroke();
+//		screen.noStroke();
 		screen.lights();
-		mesh();
+
+		if (screen.cp5.window(screen).isMouseOver()) {
+	        camera.setActive(false);
+	      } else {
+	        camera.setActive(true);
+	      }
+
 		
-//		Main.print("\nMesheando");
+		mesh.center(new Vec3D(posX,0,0));
+		mesh();
+		camera.beginHUD();
+		screen.noLights();
+		screen.cp5.draw();
+		camera.endHUD();
+//		Main.print(file);
+//		Main.print("\nposX: "+ posX);
 	}
-	
 
 	private void mesh() {
 		screen.beginShape(Main.TRIANGLES);
@@ -72,30 +92,74 @@ public class PreScreen implements ScreenPhase{
 	public void setup() {
 		screen.setTitle("Preprocesamiento");
 		screen.addButton("Volver atras", 200, 25, 1150, 5, new OpenStartScreenListener(screen));
-		screen.addButton("Seleccionar modelo", 200, 25, 15, 15, new OpenMeshListener(screen));
+		screen.addButton("Seleccionar modelo", 200, 25, 15, 15, this);
+		screen.addSlider("posX","Posicion en X", 200, 15, 15, 50, -250,250,this);
 		
+		if (camera == null){
+			camera = new PeasyCam(screen, 500);
+		} else {
+			camera.setActive(true);
+			camera.reset(0);
+		}
+		screen.cp5.setAutoDraw(false);
 		
-		mesh = (TriangleMesh)new STLReader().loadBinary(screen.sketchPath("/mesh/mesh.stl"),STLReader.TRIANGLEMESH).flipYAxis();
+//		mesh = (TriangleMesh)new STLReader().loadBinary(screen.sketchPath("/mesh/mesh.stl"),STLReader.TRIANGLEMESH).flipYAxis();
+		mesh = new TriangleMesh();
 		
-		camera = new PeasyCam(screen, 0, 0, 0, 50);
 	}
 	
-	public class OpenMeshListener implements CallbackListener {
-
-		private Main screen;
-		
-		public OpenMeshListener(Main screen) {
-			this.screen = screen;
+	
+	public void controlEvent(ControlEvent theEvent) {
+		if(theEvent.isController()) { 
+			if(theEvent.getController().getName()=="posX") {
+				posX = theEvent.getController().getValue();
+//				Main.print("\nposX: "+ posX);
+			 }
+			if(theEvent.getController().getName()=="Seleccionar modelo") {
+				new Thread(
+					    new Runnable() {
+					      public void run() {
+					    	  synchronized (screen){
+					    		  loadMesh(screen.selectInput());
+					    	  }
+					      }
+					    }
+					  ).start();
+//				screen.noLoop();
+//				String meshFile = screen.selectInput();
+//				screen.loop();
+			 }
+			
 		}
-
-		@Override
-		public void controlEvent(CallbackEvent theEvent) {
-			if (theEvent.getAction() == ControlP5.ACTION_RELEASED) {
-				String meshFile = screen.selectInput();
-				System.out.print(meshFile);
-			}
+	}
+	
+	protected TriangleMesh loadMesh(String selectInput) {
+		if (selectInput!= null){
+			mesh = (TriangleMesh)new STLReader().loadBinary(screen.sketchPath(selectInput),STLReader.TRIANGLEMESH);
+			return mesh;
 		}
-		
+		return null;
+	}
 
+//	public class OpenMeshListener implements CallbackListener {
+//		private Main screen;
+//		public OpenMeshListener(Main screen) {
+//			this.screen = screen;
+//		}
+//		@Override
+//		public void controlEvent(CallbackEvent theEvent) {
+//			if (theEvent.getAction() == ControlP5.ACTION_RELEASED) {
+//				String meshFile = screen.selectInput();
+//			}
+//		}
+//	}
+	
+
+	@Override
+	public void destroy() {
+		camera.reset(0);
+		camera.setActive(false);
+		screen.camera();
+		
 	}
 }
