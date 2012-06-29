@@ -1,9 +1,11 @@
 package proyecto;
 
 import controlP5.Button;
+import controlP5.ControlEvent;
 import controlP5.ControlFont;
+import controlP5.ControlListener;
 
-public class StartScreen implements ScreenPhase {
+public class StartScreen implements ScreenPhase,ControlListener {
 	private Main screen;
 
 	public StartScreen(Main screen) {
@@ -19,7 +21,7 @@ public class StartScreen implements ScreenPhase {
 
 	@Override
 	public void setup() {
-		screen.addButton("Nueva simulacion", 200, 25, 250, 200, new OpenPreScreenListener(screen));
+		screen.addButton("Nueva simulacion", 200, 25, 250, 200, this);
 		
 //		Button b = screen.cp5.addButton("Nueva Simulacion")
 //			.setPosition(100, 120)
@@ -36,10 +38,21 @@ public class StartScreen implements ScreenPhase {
 		screen.setTitle("Pantala principal");
 		
 	}
+	
+	@Override
+	public void controlEvent(ControlEvent theEvent) {
+		if(theEvent.isController()) { 
+			if(theEvent.getController().getName()=="Nueva simulacion") {
+				screen.changeScreen(new PreScreen(screen));
+			}	
+		}
+		
+	}
 
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
 		
 	}
+
 }

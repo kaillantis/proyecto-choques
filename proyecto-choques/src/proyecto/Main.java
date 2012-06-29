@@ -21,7 +21,6 @@ public class Main extends PApplet {
 	@Override
 	public void setup() {
 		size(1280, 720, OPENGL);
-//		size(1280, 720, P3D);
 		cp5 = new ControlP5(this);
 //		ControlFont.RENDER_2X = true;
 				
@@ -30,7 +29,7 @@ public class Main extends PApplet {
 	
 	private void drawStartScreen() {
 		currentScreenPhase = new StartScreen(this);
-		changeScreen(currentScreenPhase);
+		currentScreenPhase.setup();
 	}
 	
 	public void changeScreen(ScreenPhase phase){
@@ -81,7 +80,7 @@ public class Main extends PApplet {
 		.getCaptionLabel().setFont(defaultFont).toUpperCase(false);
 	}
 	
-	public void addSlider(String varname,String title, int width, int height, int posX, int posY, float min, float max, ControlListener listener){
+	public void addSlider(String varname, String title, int width, int height, int posX, int posY, float min, float max, ControlListener listener){
 		cp5.addSlider(varname)
 			.setCaptionLabel(title)
 			.setSize(width, height)

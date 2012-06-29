@@ -1,19 +1,12 @@
 package proyecto;
 
-import org.apache.tools.ant.taskdefs.Sleep;
-
 import peasy.PeasyCam;
-import processing.core.PGraphics3D;
-import processing.core.PMatrix3D;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.Face;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.TriangleMesh;
-import controlP5.CallbackEvent;
-import controlP5.CallbackListener;
 import controlP5.ControlEvent;
 import controlP5.ControlListener;
-import controlP5.ControlP5;
 
 
 public class PreScreen implements ScreenPhase, ControlListener{
@@ -91,9 +84,10 @@ public class PreScreen implements ScreenPhase, ControlListener{
 	@Override
 	public void setup() {
 		screen.setTitle("Preprocesamiento");
-		screen.addButton("Volver atras", 200, 25, 1150, 5, new OpenStartScreenListener(screen));
+		screen.addButton("Volver atras", 200, 25, 1150, 5,this);
 		screen.addButton("Seleccionar modelo", 200, 25, 15, 15, this);
 		screen.addSlider("posX","Posicion en X", 200, 15, 15, 50, -250,250,this);
+		screen.addSlider("forceX","Fuerza en X (N)", 200, 15, 15, 75, 0, 100,this);
 		
 		if (camera == null){
 			camera = new PeasyCam(screen, 500);
@@ -103,7 +97,6 @@ public class PreScreen implements ScreenPhase, ControlListener{
 		}
 		screen.cp5.setAutoDraw(false);
 		
-//		mesh = (TriangleMesh)new STLReader().loadBinary(screen.sketchPath("/mesh/mesh.stl"),STLReader.TRIANGLEMESH).flipYAxis();
 		mesh = new TriangleMesh();
 		
 	}
@@ -125,17 +118,17 @@ public class PreScreen implements ScreenPhase, ControlListener{
 					      }
 					    }
 					  ).start();
-//				screen.noLoop();
-//				String meshFile = screen.selectInput();
-//				screen.loop();
 			 }
+			if(theEvent.getController().getName()=="Volver atras") {
+				screen.changeScreen(new StartScreen(screen));
+			}
 			
 		}
 	}
 	
-	protected TriangleMesh loadMesh(String selectInput) {
-		if (selectInput!= null){
-			mesh = (TriangleMesh)new STLReader().loadBinary(screen.sketchPath(selectInput),STLReader.TRIANGLEMESH);
+	protected TriangleMesh loadMesh(String selectedFile) {
+		if (selectedFile!= null){
+			mesh = (TriangleMesh)new STLReader().loadBinary(screen.sketchPath(selectedFile),STLReader.TRIANGLEMESH);
 			return mesh;
 		}
 		return null;
