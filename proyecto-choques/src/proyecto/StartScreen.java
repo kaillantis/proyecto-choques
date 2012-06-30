@@ -1,8 +1,6 @@
 package proyecto;
 
-import controlP5.Button;
 import controlP5.ControlEvent;
-import controlP5.ControlFont;
 import controlP5.ControlListener;
 
 public class StartScreen implements ScreenPhase,ControlListener {
@@ -23,13 +21,6 @@ public class StartScreen implements ScreenPhase,ControlListener {
 	public void setup() {
 		screen.addButton("Nueva simulacion", 200, 25, 250, 200, this);
 		
-//		Button b = screen.cp5.addButton("Nueva Simulacion")
-//			.setPosition(100, 120)
-//			.addCallback(new OpenPreScreenListener(screen));
-//			
-//		b.getCaptionLabel().setFont(cf1).toUpperCase(false);
-//		b.getCaptionLabel().setPadding(10, 10);
-//		b.getCaptionLabel().setFixedSize(true);
 //		b.setWidth(ControlFont.getWidthFor("Nueva Simulacion", b.getCaptionLabel(), screen)+ 20);
 //		System.out.print(ControlFont.getWidthFor("Nueva Simulacion", b.getCaptionLabel(), screen));
 		
@@ -46,7 +37,6 @@ public class StartScreen implements ScreenPhase,ControlListener {
 				screen.changeScreen(new PreScreen(screen));
 			}	
 		}
-		
 	}
 
 	@Override

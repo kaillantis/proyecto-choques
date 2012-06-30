@@ -1,5 +1,8 @@
 package proyecto;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import processing.core.PApplet;
 import controlP5.CallbackListener;
 import controlP5.ControlFont;
@@ -7,7 +10,6 @@ import controlP5.ControlListener;
 import controlP5.ControlP5;
 import controlP5.Controller;
 import controlP5.ControllerInterface;
-import controlP5.Label;
 import controlP5.Textlabel;
 
 public class Main extends PApplet {
@@ -17,7 +19,7 @@ public class Main extends PApplet {
 	private ScreenPhase currentScreenPhase;
 	ControlFont defaultFont=new ControlFont(createFont("Arial",20));
 	ControlFont smallFont=new ControlFont(createFont("Arial",14));
-
+	
 	@Override
 	public void setup() {
 		size(1280, 720, OPENGL);
@@ -25,8 +27,14 @@ public class Main extends PApplet {
 //		ControlFont.RENDER_2X = true;
 				
 		drawStartScreen();
+		loadMaterials();
 	}
 	
+	private void loadMaterials() {
+		Material.addMaterial("Plata", "E = 68.9441 NU = 0.370000 RHO = 0.0000105 FAILURE_STRESS = 0.1240994 YIELD_STRESS = 0.05515528 EP = 0.01",192,192,192);
+		Material.addMaterial("Plomo","E = 13.78882 NU = 0.425000 RHO = 0.00001134 FAILURE_STRESS = 0.01792547 YIELD_STRESS = 0.008962733  EP = 0.001", 119,117,118);
+	}
+
 	private void drawStartScreen() {
 		currentScreenPhase = new StartScreen(this);
 		currentScreenPhase.setup();
@@ -44,7 +52,6 @@ public class Main extends PApplet {
 	@Override
 	public void draw() {
 		currentScreenPhase.drawScreen();
-//		print("draw");
 	}
 	
 	public static void main(String _args[]) {
@@ -93,7 +100,7 @@ public class Main extends PApplet {
 	public void setTitle(String title){
 		Textlabel myTextlabelA = cp5.addTextlabel("label")
                 .setText(title)
-                .setColorValue(0xffffff00)
+                .setColor(0xffffff00)
                 .setFont(ControlP5.grixel)
                 ;
 		myTextlabelA.setSize(1280, 30);

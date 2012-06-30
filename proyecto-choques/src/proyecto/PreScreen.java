@@ -7,14 +7,22 @@ import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.TriangleMesh;
 import controlP5.ControlEvent;
 import controlP5.ControlListener;
+import controlP5.DropdownList;
 
 
 public class PreScreen implements ScreenPhase, ControlListener{
 	private Main screen;
 	TriangleMesh mesh;
+	Vec3D meshColor= new Vec3D(255,255,255);
 	private static PeasyCam camera = null;
-	float posX = 0;
-	String file = "";
+	private float posX = 0;
+	private float posY = 0;
+	private float posZ = 0;
+	private String file = "";
+	private float forceX;
+	private float forceY;
+	private float forceZ;
+
 	
 	public PreScreen(Main screen) {
 		this.screen = screen;		
@@ -26,14 +34,13 @@ public class PreScreen implements ScreenPhase, ControlListener{
 //		screen.noStroke();
 		screen.lights();
 
-		if (screen.cp5.window(screen).isMouseOver()) {
+		if (screen.cp5.getWindow(screen).isMouseOver()) {
 	        camera.setActive(false);
 	      } else {
 	        camera.setActive(true);
 	      }
 
-		
-		mesh.center(new Vec3D(posX,0,0));
+		mesh.center(new Vec3D(posX,posY,posZ));
 		mesh();
 		camera.beginHUD();
 		screen.noLights();
@@ -45,34 +52,19 @@ public class PreScreen implements ScreenPhase, ControlListener{
 
 	private void mesh() {
 		screen.beginShape(Main.TRIANGLES);
-		
-		Vec3D colAmp=new Vec3D(400, 200, 200);
-		Vec3D newColAmp=new Vec3D(1, 400, 1500);
-		Vec3D neuColAmp=new Vec3D(255, 100, 100);
-		int num=mesh.getNumFaces();
-//		  mesh.computeVertexNormals();
-		  for(int i=0; i<num; i++) {
-		    Face f=mesh.faces.get(i);
-		    Vec3D col=f.a.add(colAmp).scaleSelf((float) 0.5);
-		    if (i == 50)
-		    	col = f.a.add(newColAmp);
-		    screen.fill(col.x,col.y,col.z);
-//		    normal(f.a.normal.x,f.a.normal.y,f.a.normal.z);
-		    vertex(f.a);
-		    if (i == 50)
-		    	col = f.b.add(neuColAmp.scaleSelf((float) 0.5));
-		    screen.fill(col.x,col.y,col.z);
-//		    normal(f.b.normal.x,f.b.normal.y,f.b.normal.z);
-		    vertex(f.b);
-		    if (i == 50)
-		    	col = f.c.add(colAmp);
-		    screen.fill(col.x,col.y,col.z);
-//		    normal(f.c.normal.x,f.c.normal.y,f.c.normal.z);
-		    vertex(f.c);
-		    
-		  }
-			screen.endShape();
 
+		int num = mesh.getNumFaces();
+		for (int i = 0; i < num; i++) {
+			Face f = mesh.faces.get(i);
+			Vec3D col = meshColor;
+			screen.fill(col.x, col.y, col.z);
+			vertex(f.a);
+			screen.fill(col.x, col.y, col.z);
+			vertex(f.b);
+			screen.fill(col.x, col.y, col.z);
+			vertex(f.c);
+		}
+		screen.endShape();
 	}
 	
 		 
@@ -87,7 +79,15 @@ public class PreScreen implements ScreenPhase, ControlListener{
 		screen.addButton("Volver atras", 200, 25, 1150, 5,this);
 		screen.addButton("Seleccionar modelo", 200, 25, 15, 15, this);
 		screen.addSlider("posX","Posicion en X", 200, 15, 15, 50, -250,250,this);
-		screen.addSlider("forceX","Fuerza en X (N)", 200, 15, 15, 75, 0, 100,this);
+		screen.addSlider("posY","Posicion en Y", 200, 15, 15, 75, -250,250,this);
+		screen.addSlider("posZ","Posicion en Z", 200, 15, 15, 100, -250,250,this);
+		
+		
+		screen.addSlider("forceX","Fuerza en X (N)", 200, 15, 15, 175, 0, 100,this);
+		screen.addSlider("forceY","Fuerza en Y (N)", 200, 15, 15, 200, 0, 100,this);
+		screen.addSlider("forceY","Fuerza en Z (N)", 200, 15, 15, 225, 0, 100,this);
+		
+		addMaterialList();
 		
 		if (camera == null){
 			camera = new PeasyCam(screen, 500);
@@ -102,12 +102,43 @@ public class PreScreen implements ScreenPhase, ControlListener{
 	}
 	
 	
+	private void addMaterialList() {
+		DropdownList matList = screen.cp5.addDropdownList("Material");
+		matList.setPosition(15,150);
+		matList.setSize(200, 200);
+		matList.setBarHeight(20);
+		matList.getCaptionLabel().setFont(screen.smallFont).toUpperCase(false);
+		matList.addItems(Material.getMaterialList());
+		matList.addListener(this);
+		
+	}
+
 	public void controlEvent(ControlEvent theEvent) {
 		if(theEvent.isController()) { 
 			if(theEvent.getController().getName()=="posX") {
 				posX = theEvent.getController().getValue();
-//				Main.print("\nposX: "+ posX);
 			 }
+			
+			if(theEvent.getController().getName()=="posY") {
+				posY = theEvent.getController().getValue();
+			 }
+			
+			if(theEvent.getController().getName()=="posZ") {
+				posZ = theEvent.getController().getValue();
+			 }
+			
+			if(theEvent.getController().getName()=="forceX") {
+				forceX = theEvent.getController().getValue();
+			 }
+			
+			if(theEvent.getController().getName()=="forceY") {
+				forceY = theEvent.getController().getValue();
+			 }
+			
+			if(theEvent.getController().getName()=="forceZ") {
+				forceZ = theEvent.getController().getValue();
+			 }
+			
 			if(theEvent.getController().getName()=="Seleccionar modelo") {
 				new Thread(
 					    new Runnable() {
@@ -119,13 +150,25 @@ public class PreScreen implements ScreenPhase, ControlListener{
 					    }
 					  ).start();
 			 }
+			
 			if(theEvent.getController().getName()=="Volver atras") {
 				screen.changeScreen(new StartScreen(screen));
 			}
+		}
+		
+		if (theEvent.isGroup()) {
+			if(theEvent.getGroup().getName()=="Material") {
+				MaterialItem mat = Material.getMaterialList().get((int) theEvent.getGroup().getValue());
+				this.changeMeshColor(mat.getColor());
+			 }
 			
 		}
 	}
 	
+	private void changeMeshColor(Vec3D color) {
+		meshColor = color;
+	}
+
 	protected TriangleMesh loadMesh(String selectedFile) {
 		if (selectedFile!= null){
 			mesh = (TriangleMesh)new STLReader().loadBinary(screen.sketchPath(selectedFile),STLReader.TRIANGLEMESH);
@@ -134,25 +177,11 @@ public class PreScreen implements ScreenPhase, ControlListener{
 		return null;
 	}
 
-//	public class OpenMeshListener implements CallbackListener {
-//		private Main screen;
-//		public OpenMeshListener(Main screen) {
-//			this.screen = screen;
-//		}
-//		@Override
-//		public void controlEvent(CallbackEvent theEvent) {
-//			if (theEvent.getAction() == ControlP5.ACTION_RELEASED) {
-//				String meshFile = screen.selectInput();
-//			}
-//		}
-//	}
-	
 
 	@Override
 	public void destroy() {
 		camera.reset(0);
 		camera.setActive(false);
 		screen.camera();
-		
 	}
 }
