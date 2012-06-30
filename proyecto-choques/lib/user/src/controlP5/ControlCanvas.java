@@ -20,8 +20,8 @@ package controlP5;
  * Boston, MA 02111-1307 USA
  *
  * @author 		Andreas Schlegel (http://www.sojamo.de)
- * @modified	05/22/2012
- * @version		0.7.3
+ * @modified	05/30/2012
+ * @version		0.7.5
  *
  */
 
@@ -36,7 +36,9 @@ import processing.core.PApplet;
 public abstract class ControlCanvas {
 
 	public final static int PRE = 0;
+	
 	public final static int POST = 1;
+	
 	protected int _myMode = PRE;
 
 	public ControlCanvas() {

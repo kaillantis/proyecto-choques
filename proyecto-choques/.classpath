@@ -1,26 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/base/opengl/gluegen-rt.jar" sourcepath="D:/processing/modes/java/libraries/opengl/src">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="proyecto-choques/lib/base/opengl"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/base/opengl/jogl.jar" sourcepath="D:/processing/modes/java/libraries/opengl/src">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="proyecto-choques/lib/base/opengl"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/base/opengl/opengl.jar" sourcepath="D:/processing/modes/java/libraries/opengl/src">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="proyecto-choques/lib/base/opengl"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="lib/base/core/ant-launcher.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="choques/lib/base/core"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="proyecto-choques/lib/base/core"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/base/core/ant.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="choques/lib/base/core"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="proyecto-choques/lib/base/core"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/base/core/core.jar" sourcepath="lib/user">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="choques/lib/base/core"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="proyecto-choques/lib/base/core"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/user/toxiclibs_p5.jar" sourcepath="lib/user/src/"/>
-	<classpathentry kind="lib" path="lib/user/toxiclibscore.jar" sourcepath="lib/user/src/"/>
-	<classpathentry kind="lib" path="lib/user/peasycam.jar" sourcepath="lib/user/src"/>
+	<classpathentry kind="lib" path="lib/user/colorutils.jar"/>
 	<classpathentry kind="lib" path="lib/user/controlP5.jar" sourcepath="lib/user"/>
-	<classpathentry kind="lib" path="lib/user/colorutils.jar" sourcepath="lib/user"/>
+	<classpathentry kind="lib" path="lib/user/peasycam.jar" sourcepath="lib/user"/>
+	<classpathentry kind="lib" path="lib/user/toxiclibs_p5.jar" sourcepath="lib/user"/>
+	<classpathentry kind="lib" path="lib/user/toxiclibscore.jar" sourcepath="lib/user"/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

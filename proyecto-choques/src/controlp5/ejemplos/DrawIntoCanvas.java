@@ -12,10 +12,7 @@ package controlp5.ejemplos;
  *
  */
 
-import java.awt.Color;
-import java.awt.HeadlessException;
-
-import javax.swing.JFileChooser;
+import java.awt.Frame;
 
 import peasy.PeasyCam;
 import processing.core.PApplet;
@@ -51,36 +48,30 @@ public class DrawIntoCanvas extends PApplet {
 		@Override
 		public void setup(PApplet theApplet) {
 			
-			CallbackListener cb = new CallbackListener() {
-				
-				@Override
-				public void controlEvent(CallbackEvent theEvent) {
-					noLoop();
-					final JFileChooser fc = new JFileChooser();
-					// MeshFilter meshFilter = new MeshFilter();
-					// fc.addChoosableFileFilter(meshFilter);
-					if (theEvent.getAction() == ControlP5.ACTION_RELEASED){
-						
-						try {
-							noLoop();
-							fc.showOpenDialog(DrawIntoCanvas.this);
-							loop();
-						} catch (HeadlessException e) {
-							System.out.print("paso por aca loco");
-						}
-					}
-					// theEvent.getController().getControlWindow().papplet()
-					loop();
-				}
-			};
+//			CallbackListener cb = new CallbackListener() {
+//				@Override
+//				public void controlEvent(CallbackEvent theEvent) {		
+//					if (theEvent.getAction() == ControlP5.ACTION_RELEASED){
+//							System.out.print("Before noLoop\n");
+//							noLoop();
+//							JFileChooser fc = new JFileChooser();
+//							System.out.print("Before frame\n");
+//							fc.showOpenDialog(DrawIntoCanvas.this);
+//							System.out.print("Before loop\n");
+//							loop();
+//					}
+//				}
+//			};
 			
 			CallbackListener cb2 = new CallbackListener() {
 				@Override
 				public void controlEvent(CallbackEvent theEvent) {
-					
 					if (theEvent.getAction() == ControlP5.ACTION_RELEASED) {
+
 						noLoop();
-						javax.swing.JOptionPane.showMessageDialog(frame,"what?");
+						
+						javax.swing.JOptionPane.showMessageDialog(new Frame(),"what?");
+						
 						loop();
 					}
 				}
@@ -91,7 +82,7 @@ public class DrawIntoCanvas extends PApplet {
 			cp5 = new ControlP5(theApplet);
 			// create a new button with name 'buttonA'
 			cp5.addButton("colorA").setValue(0).setPosition(100, 100)
-					.setSize(200, 19).addCallback(cb);
+					.setSize(200, 19);//.addCallback(cb);
 
 			// and add another 2 buttons
 			cp5.addButton("colorB").setValue(100).setPosition(100, 120)
@@ -116,49 +107,13 @@ public class DrawIntoCanvas extends PApplet {
 //			theApplet.draw();
 			
 		}
-
-//		@Override
-//		public void draw(PApplet theApplet) {
-//			// background(myColor);
-//			myColor = lerpColor(c1, c2, n);
-//			n += (1 - n) * 0.1;
-//		}
-
-//		public void controlEvent(ControlEvent theEvent) {
-//			println(theEvent.getController().getName());
-//			n = 0;
-//		}
-
-//		public void colorA(int theValue) {
-//			println("a button event from colorA: " + theValue);
-//			c1 = c2;
-//			c2 = color(0, 160, 100);
-//		}
-//
-//		public void colorB(int theValue) {
-//			println("a button event from colorB: " + theValue);
-//			c1 = c2;
-//			c2 = color(150, 0, 0);
-//		}
-//
-//		public void colorC(int theValue) {
-//			println("a button event from colorC: " + theValue);
-//			c1 = c2;
-//			c2 = color(255, 255, 0);
-//		}
-//
-//		public void play(int theValue) {
-//			println("a button event from buttonB: " + theValue);
-//			c1 = c2;
-//			c2 = color(0, 0, 0);
-//		}
 	}
 
 	@Override
 	public void setup() {
 		// size(400, 400);
 		// frameRate(30);
-		Color col = new Color(31);
+//		Color col = new Color(31);
 		
 		size(600, 600, P3D);
 		
@@ -170,9 +125,8 @@ public class DrawIntoCanvas extends PApplet {
 
 		controlWindow = controlP5.addControlWindow("controlP5window", 100, 100,
 				width, height, 30);
-		controlWindow.setUpdateMode(ControlWindow.NORMAL);
+//		controlWindow.setUpdateMode(ControlWindow.NORMAL);
 		// controlWindow.setUpdateMode(ControlWindow.NORMAL);
-		//
 		cc = new MyCanvas();
 		cc.post();
 		controlWindow.addCanvas(cc);
@@ -207,17 +161,17 @@ public class DrawIntoCanvas extends PApplet {
 		    if (i == 50)
 		    	col = f.a.add(newColAmp);
 		    fill(col.x,col.y,col.z);
-		    normal(f.a.normal.x,f.a.normal.y,f.a.normal.z);
+//		    normal(f.a.normal.x,f.a.normal.y,f.a.normal.z);
 		    vertex(f.a);
 		    if (i == 50)
 		    	col = f.b.add(neuColAmp.scaleSelf((float) 0.5));
 		    fill(col.x,col.y,col.z);
-		    normal(f.b.normal.x,f.b.normal.y,f.b.normal.z);
+//		    normal(f.b.normal.x,f.b.normal.y,f.b.normal.z);
 		    vertex(f.b);
 		    if (i == 50)
 		    	col = f.c.add(colAmp);
 		    fill(col.x,col.y,col.z);
-		    normal(f.c.normal.x,f.c.normal.y,f.c.normal.z);
+//		    normal(f.c.normal.x,f.c.normal.y,f.c.normal.z);
 		    vertex(f.c);
 		    
 		  }
@@ -232,6 +186,7 @@ public class DrawIntoCanvas extends PApplet {
 	private void vertex(Vec3D v) {
 		  vertex(v.x,v.y,v.z);
 		}
+	
 	
 	
 	public static void main(String _args[]) {

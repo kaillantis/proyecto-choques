@@ -20,8 +20,8 @@ package controlP5;
  * Boston, MA 02111-1307 USA
  *
  * @author 		Andreas Schlegel (http://www.sojamo.de)
- * @modified	05/22/2012
- * @version		0.7.3
+ * @modified	05/30/2012
+ * @version		0.7.5
  *
  */
 
@@ -102,9 +102,9 @@ public class ControllerProperties {
 		Format.JSON.set(new JSONFormat());
 	}
 
-	final static int OPEN = 0;
+	public final static int OPEN = 0;
 
-	final static int CLOSE = 1;
+	public final static int CLOSE = 1;
 
 	public static String defaultName = "controlP5";
 
