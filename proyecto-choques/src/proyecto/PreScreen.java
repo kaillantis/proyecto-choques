@@ -85,7 +85,7 @@ public class PreScreen implements ScreenPhase, ControlListener{
 		
 		screen.addSlider("forceX","Fuerza en X (N)", 200, 15, 15, 175, 0, 100,this);
 		screen.addSlider("forceY","Fuerza en Y (N)", 200, 15, 15, 200, 0, 100,this);
-		screen.addSlider("forceY","Fuerza en Z (N)", 200, 15, 15, 225, 0, 100,this);
+		screen.addSlider("forceZ","Fuerza en Z (N)", 200, 15, 15, 225, 0, 100,this);
 		
 		addMaterialList();
 		
@@ -140,16 +140,8 @@ public class PreScreen implements ScreenPhase, ControlListener{
 			 }
 			
 			if(theEvent.getController().getName()=="Seleccionar modelo") {
-				new Thread(
-					    new Runnable() {
-					      public void run() {
-					    	  synchronized (screen){
-					    		  loadMesh(screen.selectInput());
-					    	  }
-					      }
-					    }
-					  ).start();
-			 }
+				new Thread(new Runnable() {public void run() {synchronized (screen){
+					    		  loadMesh(screen.selectInput());}}}).start();}
 			
 			if(theEvent.getController().getName()=="Volver atras") {
 				screen.changeScreen(new StartScreen(screen));
@@ -161,7 +153,6 @@ public class PreScreen implements ScreenPhase, ControlListener{
 				MaterialItem mat = Material.getMaterialList().get((int) theEvent.getGroup().getValue());
 				this.changeMeshColor(mat.getColor());
 			 }
-			
 		}
 	}
 	
