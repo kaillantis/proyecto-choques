@@ -93,12 +93,48 @@ public class MSHReader {
 			int numeroDeTagsDelElemento = this.getNumeroDeTagsDelElemento(cantidadDeNumeros,j,posicionesDeElementos);
 			//¿Se podrá hacer un diccionario con métodos en cascada que sean strings y con el invoke invocarlos? --> Estoy relimado
 			
-			if(numeroDeTagsDelElemento == 3)
-			for(int l = 0; l <= numeroDeTagsDelElemento; l++){
-				
-			}
+			Object entidadGeometricaElemental;
+			
+			
+			Object entidadFisica = this.crearEntidadFisica(this.getNumeroEntidadFisica(j,posicionesDeElementos));
+			
+			this.bypassearPrimerNumero(j, posicionesDeElementos);
+			
+			 entidadGeometricaElemental  = this.crearEntidadGeometricaElemental(this.getNumeroDeEntidadGeometricaElemental(j,posicionesDeElementos));
+			 
+			 this.getNumeroDeParticionMesh(j,posicionesDeElementos);
+
+			
 		}
 			
+	}
+
+	private void getNumeroDeParticionMesh(int j, char[] posicionesDeElementos) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private Object crearEntidadGeometricaElemental(
+			Object numeroDeEntidadGeometricaElemental) {
+				return numeroDeEntidadGeometricaElemental;
+		// TODO Auto-generated method stub
+		
+	}
+
+	private Object getNumeroDeEntidadGeometricaElemental(int j,
+			char[] posicionesDeElementos) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Object crearEntidadFisica(int numeroEntidadFisica) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private int getNumeroEntidadFisica(int j, char[] posicionesDeElementos) {
+		// TODO Auto-generated method stub
+		return j;
 	}
 
 	private int getNumeroDeTagsDelElemento(int cantidadDeNumeros, int j,
