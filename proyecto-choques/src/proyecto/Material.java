@@ -6,6 +6,11 @@ import java.util.List;
 public class Material {
 	private static List<MaterialItem> materialList = new ArrayList<MaterialItem>();
 	
+	static {
+		Material.addMaterial("Plata", "E = 68.9441 NU = 0.370000 RHO = 0.0000105 FAILURE_STRESS = 0.1240994 YIELD_STRESS = 0.05515528 EP = 0.01",192,192,192);
+		Material.addMaterial("Plomo","E = 13.78882 NU = 0.425000 RHO = 0.00001134 FAILURE_STRESS = 0.01792547 YIELD_STRESS = 0.008962733  EP = 0.001", 119,117,118);
+	}
+	
 	public static List<MaterialItem> getMaterialList() {
 		return materialList;
 	}

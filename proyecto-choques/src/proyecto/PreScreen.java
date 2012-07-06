@@ -76,7 +76,7 @@ public class PreScreen implements ScreenPhase, ControlListener{
 	@Override
 	public void setup() {
 		screen.setTitle("Preprocesamiento");
-		screen.addButton("Volver atras", 200, 25, 1150, 5,this);
+		screen.addButton("Volver atras", 130, 25, 1150, 5,this);
 		screen.addButton("Seleccionar modelo", 200, 25, 15, 15, this);
 		screen.addSlider("posX","Posicion en X", 200, 15, 15, 50, -250,250,this);
 		screen.addSlider("posY","Posicion en Y", 200, 15, 15, 75, -250,250,this);
@@ -86,6 +86,8 @@ public class PreScreen implements ScreenPhase, ControlListener{
 		screen.addSlider("forceX","Fuerza en X (N)", 200, 15, 15, 175, 0, 100,this);
 		screen.addSlider("forceY","Fuerza en Y (N)", 200, 15, 15, 200, 0, 100,this);
 		screen.addSlider("forceZ","Fuerza en Z (N)", 200, 15, 15, 225, 0, 100,this);
+		
+		screen.addButton("Procesar", 300, 30, 490, 690,this);
 		
 		addMaterialList();
 		
@@ -103,10 +105,11 @@ public class PreScreen implements ScreenPhase, ControlListener{
 	
 	
 	private void addMaterialList() {
+//		screen.cp5.setFont(screen.smallFont);
 		DropdownList matList = screen.cp5.addDropdownList("Material");
 		matList.setPosition(15,150);
 		matList.setSize(200, 200);
-		matList.setBarHeight(20);
+		matList.setBarHeight(18);
 		matList.getCaptionLabel().setFont(screen.smallFont).toUpperCase(false);
 		matList.addItems(Material.getMaterialList());
 		matList.addListener(this);
@@ -139,6 +142,10 @@ public class PreScreen implements ScreenPhase, ControlListener{
 				forceZ = theEvent.getController().getValue();
 			 }
 			
+			if(theEvent.getController().getName()=="Procesar") {
+				process();
+			 }
+			
 			if(theEvent.getController().getName()=="Seleccionar modelo") {
 				new Thread(new Runnable() {public void run() {synchronized (screen){
 					    		  loadMesh(screen.selectInput());}}}).start();}
@@ -166,6 +173,10 @@ public class PreScreen implements ScreenPhase, ControlListener{
 			return mesh;
 		}
 		return null;
+	}
+	
+	private void process(){
+		// Aca se empieza el procesamiento.
 	}
 
 

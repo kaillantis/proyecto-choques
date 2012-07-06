@@ -25,7 +25,7 @@ public class StartScreen implements ScreenPhase,ControlListener {
 //		System.out.print(ControlFont.getWidthFor("Nueva Simulacion", b.getCaptionLabel(), screen));
 		
 		screen.cp5.setAutoDraw(true);
-		screen.addButton("Ver resultados", 200, 25, 250, 250);
+		screen.addButton("Ver resultados", 200, 25, 250, 250,this);
 		screen.setTitle("Pantala principal");
 		
 	}

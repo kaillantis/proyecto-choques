@@ -1,8 +1,5 @@
 package proyecto;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import processing.core.PApplet;
 import controlP5.CallbackListener;
 import controlP5.ControlFont;
@@ -27,13 +24,8 @@ public class Main extends PApplet {
 //		ControlFont.RENDER_2X = true;
 				
 		drawStartScreen();
-		loadMaterials();
 	}
 	
-	private void loadMaterials() {
-		Material.addMaterial("Plata", "E = 68.9441 NU = 0.370000 RHO = 0.0000105 FAILURE_STRESS = 0.1240994 YIELD_STRESS = 0.05515528 EP = 0.01",192,192,192);
-		Material.addMaterial("Plomo","E = 13.78882 NU = 0.425000 RHO = 0.00001134 FAILURE_STRESS = 0.01792547 YIELD_STRESS = 0.008962733  EP = 0.001", 119,117,118);
-	}
 
 	private void drawStartScreen() {
 		currentScreenPhase = new StartScreen(this);
@@ -84,7 +76,7 @@ public class Main extends PApplet {
 		setSize(width, height)
 		.setPosition(posX, posY)
 		.addListener(listener)
-		.getCaptionLabel().setFont(defaultFont).toUpperCase(false);
+		.getCaptionLabel().setFont(defaultFont).toUpperCase(false).align(ControlP5.CENTER, ControlP5.CENTER);
 	}
 	
 	public void addSlider(String varname, String title, int width, int height, int posX, int posY, float min, float max, ControlListener listener){
