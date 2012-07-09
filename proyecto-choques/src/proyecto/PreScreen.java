@@ -2,7 +2,6 @@ package proyecto;
 
 import peasy.PeasyCam;
 import toxi.geom.Vec3D;
-import toxi.geom.mesh.Face;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.TriangleMesh;
 import controlP5.ControlEvent;
@@ -10,18 +9,14 @@ import controlP5.ControlListener;
 import controlP5.DropdownList;
 
 public class PreScreen implements ScreenPhase, ControlListener {
+	private static final String NOMBRE_MESH_2 = "Mesh 2";
+	private static final String NOMBRE_MESH_1 = "Mesh 1";
 	private Main screen;
-	TriangleMesh mesh;
-	TriangleMesh mesh2;
-	TriangleMesh focusedMesh;
+	Modelo mesh1;
+	Modelo mesh2;
+	Modelo focusedMesh;
 	Vec3D meshColor = new Vec3D(255, 255, 255);
 	private static PeasyCam camera = null;
-	private float posX = 0;
-	private float posY = 0;
-	private float posZ = 0;
-	private float posXmodelo2 = 0;
-	private float posYmodelo2 = 0;
-	private float posZmodelo2 = 0;
 	private String file = "";
 	private float forceX;
 	private float forceY;
@@ -38,6 +33,8 @@ public class PreScreen implements ScreenPhase, ControlListener {
 		screen.background(51);
 		// screen.noStroke();
 		screen.lights();
+		
+		
 
 		if (screen.cp5.getWindow(screen).isMouseOver()) {
 			camera.setActive(false);
@@ -45,12 +42,15 @@ public class PreScreen implements ScreenPhase, ControlListener {
 			camera.setActive(true);
 		}
 
-		mesh.name = "Mesh 1";
-		mesh.center(new Vec3D(posX, posY, posZ));
-		mesh(mesh);
-		mesh2.name = "Mesh 2";
-		mesh2.center(new Vec3D(posXmodelo2, posYmodelo2, posZmodelo2));
-		mesh(mesh2);
+		mesh1.setName(NOMBRE_MESH_1);
+		mesh1.rendeNewPos(screen);
+//		mesh1.center(new Vec3D(posX, posY, posZ));
+//		mesh(mesh1);
+		mesh2.setName(NOMBRE_MESH_2);
+		mesh2.rendeNewPos(screen);
+//		mesh2.name = NOMBRE_MESH_2;
+//		mesh2.center(new Vec3D(posXmodelo2, posYmodelo2, posZmodelo2));
+//		mesh(mesh2);
 		
 		camera.beginHUD();
 		screen.noLights();
@@ -58,27 +58,6 @@ public class PreScreen implements ScreenPhase, ControlListener {
 		camera.endHUD();
 		// Main.print(file);
 		// Main.print("\nposX: "+ posX);
-	}
-
-	private void mesh(TriangleMesh aMesh) {
-		screen.beginShape(Main.TRIANGLES);
-
-		int num = aMesh.getNumFaces();
-		for (int i = 0; i < num; i++) {
-			Face f = aMesh.faces.get(i);
-			Vec3D col = meshColor;
-			screen.fill(col.x, col.y, col.z);
-			vertex(f.a);
-			screen.fill(col.x, col.y, col.z);
-			vertex(f.b);
-			screen.fill(col.x, col.y, col.z);
-			vertex(f.c);
-		}
-		screen.endShape();
-	}
-
-	private void vertex(Vec3D v) {
-		screen.vertex(v.x, v.y, v.z);
 	}
 
 	@Override
@@ -114,8 +93,11 @@ public class PreScreen implements ScreenPhase, ControlListener {
 		}
 		screen.cp5.setAutoDraw(false);
 
-		mesh = new TriangleMesh();
-		mesh2 = new TriangleMesh();
+		mesh1 = new Modelo();
+		mesh1.setName(NOMBRE_MESH_1);
+		mesh2 = new Modelo();
+		mesh2.setName(NOMBRE_MESH_2);
+//		mesh2 = new TriangleMesh(NOMBRE_MESH_2);
 
 	}
 
@@ -143,34 +125,19 @@ public class PreScreen implements ScreenPhase, ControlListener {
 		if (theEvent.isController()) {
 			if (theEvent.getController().getName() == "posX") {
 				if(focusedMesh!= null){
-					if(focusedMesh.name == "Mesh 1"){						
-						posX = theEvent.getController().getValue();
-					}
-					else{
-						posXmodelo2 = theEvent.getController().getValue();
-					}
+					focusedMesh.updatePosX(theEvent.getController().getValue());
 				}
 			}
 
 			if (theEvent.getController().getName() == "posY") {
-				if(focusedMesh!= null){
-					if(focusedMesh.name == "Mesh 1"){						
-						posY = theEvent.getController().getValue();
-					}
-					else{
-						posYmodelo2 = theEvent.getController().getValue();
-					}
+				if(focusedMesh!= null){					
+					focusedMesh.updatePosY(theEvent.getController().getValue());
 				}
 			}
 
 			if (theEvent.getController().getName() == "posZ") {
-				if(focusedMesh!= null){
-					if(focusedMesh.name == "Mesh 1"){						
-						posZ = theEvent.getController().getValue();
-					}
-					else{
-						posZmodelo2 = theEvent.getController().getValue();
-					}
+				if(focusedMesh!= null){						
+					focusedMesh.updatePosZ(theEvent.getController().getValue());
 				}
 			}
 
@@ -194,7 +161,7 @@ public class PreScreen implements ScreenPhase, ControlListener {
 				new Thread(new Runnable() {
 					public void run() {
 						synchronized (screen) {
-							mesh = loadMesh(screen.selectInput(), mesh);
+							mesh1.setMesh(getMeshFromFile(screen.selectInput()));
 							modeloList.addItem("Modelo 1", 1);
 						}
 					}
@@ -205,10 +172,11 @@ public class PreScreen implements ScreenPhase, ControlListener {
 				new Thread(new Runnable() {
 					public void run() {
 						synchronized (screen) {
-							mesh2 = loadMesh(screen.selectInput(), mesh2);
+							mesh2.setMesh(getMeshFromFile(screen.selectInput()));
 							modeloList.addItem("Modelo 2", 2);
 						}
 					}
+
 				}).start();
 			}
 
@@ -221,14 +189,17 @@ public class PreScreen implements ScreenPhase, ControlListener {
 			if (theEvent.getGroup().getName() == "Material") {
 				MaterialItem mat = Material.getMaterialList().get(
 						(int) theEvent.getGroup().getValue());
-				this.changeMeshColor(mat.getColor());
+				
+				if(focusedMesh != null){
+					this.focusedMesh.changeMeshColor(mat.getColor());
+				}
 			}
 		}
 		
 		if (theEvent.isGroup()) {
 			if (theEvent.getGroup().getName() == "Modelos") {
 				if(theEvent.getGroup().getValue() == 1){
-					this.focusedMesh = mesh;
+					this.focusedMesh = mesh1;
 				}
 				else{
 					this.focusedMesh = mesh2;
@@ -237,17 +208,13 @@ public class PreScreen implements ScreenPhase, ControlListener {
 		}
 	}
 
-	private void changeMeshColor(Vec3D color) {
-		meshColor = color;
-	}
-
-	protected TriangleMesh loadMesh(String selectedFile, TriangleMesh aMesh) {
+	protected TriangleMesh getMeshFromFile(String selectedFile) {
 		if (selectedFile != null) {
-			aMesh = (TriangleMesh) new STLReader().loadBinary(
+			return (TriangleMesh) new STLReader().loadBinary(
 					screen.sketchPath(selectedFile), STLReader.TRIANGLEMESH);
-			return aMesh;
 		}
 		return null;
+		
 	}
 
 	private void process() {
