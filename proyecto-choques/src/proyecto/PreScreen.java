@@ -101,6 +101,7 @@ public class PreScreen implements ScreenPhase, ControlListener {
 
 	}
 
+	//TODO: codigo repetido con addMaterialList
 	private void addModelosList() {
 		modeloList = screen.cp5.addDropdownList("Modelos");
 		modeloList.setPosition(15, 175);
@@ -172,6 +173,7 @@ public class PreScreen implements ScreenPhase, ControlListener {
 				new Thread(new Runnable() {
 					public void run() {
 						synchronized (screen) {
+							//TODO: CODIGO REPETIDO CON SELECCIONAR MODELO 1
 							mesh2.setMesh(getMeshFromFile(screen.selectInput()));
 							modeloList.addItem("Modelo 2", 2);
 						}
