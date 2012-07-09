@@ -66,18 +66,18 @@ public class PreScreen implements ScreenPhase, ControlListener {
 		screen.addButton("Volver atras", 130, 25, 1150, 5, this);
 		screen.addButton("Seleccionar modelo 1", 200, 25, 15, 15, this);
 		screen.addButton("Seleccionar modelo 2", 200, 25, 15, 50, this);
-		screen.addSlider("posX", "Posicion en X", 200, 15, 15, 175, -250, 250,
+		screen.addSlider("posX", "Posicion en X", 200, 15, 15, 225, -250, 250,
 				this);
-		screen.addSlider("posY", "Posicion en Y", 200, 15, 15, 200, -250, 250,
+		screen.addSlider("posY", "Posicion en Y", 200, 15, 15, 250, -250, 250,
 				this);
 		screen.addSlider("posZ", "Posicion en Z", 200, 15, 15, 275, -250, 250,
 				this);
 
-		screen.addSlider("forceX", "Fuerza en X (N)", 200, 15, 15, 300, 0, 100,
+		screen.addSlider("forceX", "Fuerza en X (N)", 200, 15, 15, 325, 0, 100,
 				this);
-		screen.addSlider("forceY", "Fuerza en Y (N)", 200, 15, 15, 325, 0, 100,
+		screen.addSlider("forceY", "Fuerza en Y (N)", 200, 15, 15, 350, 0, 100,
 				this);
-		screen.addSlider("forceZ", "Fuerza en Z (N)", 200, 15, 15, 350, 0, 100,
+		screen.addSlider("forceZ", "Fuerza en Z (N)", 200, 15, 15, 375, 0, 100,
 				this);
 
 		screen.addButton("Procesar", 300, 30, 490, 600, this);
@@ -103,7 +103,7 @@ public class PreScreen implements ScreenPhase, ControlListener {
 
 	private void addModelosList() {
 		modeloList = screen.cp5.addDropdownList("Modelos");
-		modeloList.setPosition(15, 250);
+		modeloList.setPosition(15, 175);
 		modeloList.setSize(200, 200);
 		modeloList.setBarHeight(18);
 		modeloList.getCaptionLabel().setFont(screen.smallFont).toUpperCase(false);
