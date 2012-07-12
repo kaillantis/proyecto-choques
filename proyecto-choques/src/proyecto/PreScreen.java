@@ -1,27 +1,30 @@
 package proyecto;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import peasy.PeasyCam;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.TriangleMesh;
 import controlP5.ControlEvent;
 import controlP5.ControlListener;
+import controlP5.ControlP5;
 import controlP5.DropdownList;
+import controlP5.ListBox;
+import controlP5.Slider;
 
 public class PreScreen implements ScreenPhase, ControlListener {
-	private static final String NOMBRE_MESH_2 = "Mesh 2";
-	private static final String NOMBRE_MESH_1 = "Mesh 1";
 	private Main screen;
-	Modelo mesh1;
-	Modelo mesh2;
-	Modelo focusedMesh;
+	TriangleMesh mesh;
 	Vec3D meshColor = new Vec3D(255, 255, 255);
+	private List<Model> modelList = Collections.synchronizedList(new ArrayList<Model>());
 	private static PeasyCam camera = null;
+	private ListBox modelsListBox;
 	private String file = "";
-	private float forceX;
-	private float forceY;
-	private float forceZ;
-	private DropdownList modeloList;
+	private Model selectedModel;
+	private Slider posX, posY, posZ, forceX, forceY, forceZ;
 	private DropdownList matList;
 
 	public PreScreen(Main screen) {
@@ -30,60 +33,60 @@ public class PreScreen implements ScreenPhase, ControlListener {
 
 	@Override
 	public void drawScreen() {
-		screen.background(51);
-		// screen.noStroke();
-		screen.lights();
-		
-		
+//		synchronized (screen) {
+			screen.background(51);
+			screen.noStroke();
+			screen.lights();
 
-		if (screen.cp5.getWindow(screen).isMouseOver()) {
-			camera.setActive(false);
-		} else {
-			camera.setActive(true);
+			if (screen.cp5.getWindow(screen).isMouseOver()) {
+				camera.setActive(false);
+			} else {
+				camera.setActive(true);
+			}
+
+			mesh();
+
+			camera.beginHUD();
+			screen.noLights();
+			screen.cp5.draw();
+			camera.endHUD();
+			// Main.print(file);
+			// Main.print("\nposX: "+ posX);
+//		}
+	}
+
+	private void mesh() {
+		synchronized (modelList) {
+			for (Model model : modelList) {
+				if (selectedModel == model) {
+					screen.stroke(0);
+					model.mesh(screen);
+					screen.noStroke();
+				} else {
+					model.mesh(screen);
+				}
+			}
 		}
-
-		mesh1.setName(NOMBRE_MESH_1);
-		mesh1.rendeNewPos(screen);
-//		mesh1.center(new Vec3D(posX, posY, posZ));
-//		mesh(mesh1);
-		mesh2.setName(NOMBRE_MESH_2);
-		mesh2.rendeNewPos(screen);
-//		mesh2.name = NOMBRE_MESH_2;
-//		mesh2.center(new Vec3D(posXmodelo2, posYmodelo2, posZmodelo2));
-//		mesh(mesh2);
-		
-		camera.beginHUD();
-		screen.noLights();
-		screen.cp5.draw();
-		camera.endHUD();
-		// Main.print(file);
-		// Main.print("\nposX: "+ posX);
 	}
 
 	@Override
 	public void setup() {
 		screen.setTitle("Preprocesamiento");
 		screen.addButton("Volver atras", 130, 25, 1150, 5, this);
-		screen.addButton("Seleccionar modelo 1", 200, 25, 15, 15, this);
-		screen.addButton("Seleccionar modelo 2", 200, 25, 15, 50, this);
-		screen.addSlider("posX", "Posicion en X", 200, 15, 15, 225, -250, 250,
-				this);
-		screen.addSlider("posY", "Posicion en Y", 200, 15, 15, 250, -250, 250,
-				this);
-		screen.addSlider("posZ", "Posicion en Z", 200, 15, 15, 275, -250, 250,
-				this);
+		screen.addButton("Agregar modelo", 200, 25, 1050, 50, this);
 
-		screen.addSlider("forceX", "Fuerza en X (N)", 200, 15, 15, 325, 0, 100,
-				this);
-		screen.addSlider("forceY", "Fuerza en Y (N)", 200, 15, 15, 350, 0, 100,
-				this);
-		screen.addSlider("forceZ", "Fuerza en Z (N)", 200, 15, 15, 375, 0, 100,
-				this);
+		posX = screen.addSlider("posX", "Posicion en X", 200, 15, 15, 50, -250, 250, this);
+		posY = screen.addSlider("posY", "Posicion en Y", 200, 15, 15, 75, -250, 250, this);
+		posZ = screen.addSlider("posZ", "Posicion en Z", 200, 15, 15, 100, -250, 250, this);
 
-		screen.addButton("Procesar", 300, 30, 490, 600, this);
+		forceX = screen.addSlider("forceX", "Fuerza en X (N)", 200, 15, 15, 175, 0, 100, this);
+		forceY = screen.addSlider("forceY", "Fuerza en Y (N)", 200, 15, 15, 200, 0, 100, this);
+		forceZ = screen.addSlider("forceZ", "Fuerza en Z (N)", 200, 15, 15, 225, 0, 100, this);
+
+		screen.addButton("Procesar", 300, 30, 490, 690, this);
 
 		addMaterialList();
-		addModelosList();
+		addModelList();
 
 		if (camera == null) {
 			camera = new PeasyCam(screen, 500);
@@ -93,25 +96,18 @@ public class PreScreen implements ScreenPhase, ControlListener {
 		}
 		screen.cp5.setAutoDraw(false);
 
-		mesh1 = new Modelo();
-		mesh1.setName(NOMBRE_MESH_1);
-		mesh2 = new Modelo();
-		mesh2.setName(NOMBRE_MESH_2);
-//		mesh2 = new TriangleMesh(NOMBRE_MESH_2);
-
+		mesh = new TriangleMesh();
+		selectedModel = new Model();
 	}
 
-	//TODO: codigo repetido con addMaterialList
-	private void addModelosList() {
-		modeloList = screen.cp5.addDropdownList("Modelos");
-		modeloList.setPosition(15, 175);
-		modeloList.setSize(200, 200);
-		modeloList.setBarHeight(18);
-		modeloList.getCaptionLabel().setFont(screen.smallFont).toUpperCase(false);
-		modeloList.addListener(this);
+	private void addModelList() {
+		modelsListBox = screen.cp5.addListBox("Modelos").setPosition(1050, 110).setSize(200, 120).setItemHeight(18).setBarHeight(18);
+		modelsListBox.getCaptionLabel().setFont(screen.defaultFont).toUpperCase(false).align(ControlP5.CENTER, ControlP5.CENTER);
+		modelsListBox.addListener(this);
 	}
 
 	private void addMaterialList() {
+		// screen.cp5.setFont(screen.smallFont);
 		matList = screen.cp5.addDropdownList("Material");
 		matList.setPosition(15, 150);
 		matList.setSize(200, 200);
@@ -125,60 +121,41 @@ public class PreScreen implements ScreenPhase, ControlListener {
 	public void controlEvent(ControlEvent theEvent) {
 		if (theEvent.isController()) {
 			if (theEvent.getController().getName() == "posX") {
-				if(focusedMesh!= null){
-					focusedMesh.updatePosX(theEvent.getController().getValue());
-				}
+				selectedModel.updatePosX(theEvent.getController().getValue());
 			}
 
 			if (theEvent.getController().getName() == "posY") {
-				if(focusedMesh!= null){					
-					focusedMesh.updatePosY(theEvent.getController().getValue());
-				}
+				selectedModel.updatePosY(theEvent.getController().getValue());
 			}
 
 			if (theEvent.getController().getName() == "posZ") {
-				if(focusedMesh!= null){						
-					focusedMesh.updatePosZ(theEvent.getController().getValue());
-				}
+				selectedModel.updatePosZ(theEvent.getController().getValue());
 			}
 
 			if (theEvent.getController().getName() == "forceX") {
-				forceX = theEvent.getController().getValue();
+				selectedModel.updateForceX(theEvent.getController().getValue());
 			}
 
 			if (theEvent.getController().getName() == "forceY") {
-				forceY = theEvent.getController().getValue();
+				selectedModel.updateForceY(theEvent.getController().getValue());
 			}
 
 			if (theEvent.getController().getName() == "forceZ") {
-				forceZ = theEvent.getController().getValue();
+				selectedModel.updateForceZ(theEvent.getController().getValue());
 			}
 
 			if (theEvent.getController().getName() == "Procesar") {
 				process();
 			}
 
-			if (theEvent.getController().getName() == "Seleccionar modelo 1") {
+			if (theEvent.getController().getName() == "Agregar modelo") {
+
 				new Thread(new Runnable() {
 					public void run() {
 						synchronized (screen) {
-							mesh1.setMesh(getMeshFromFile(screen.selectInput()));
-							modeloList.addItem("Modelo 1", 1);
+							loadMesh(screen.selectInput());
 						}
 					}
-				}).start();
-			}
-
-			if (theEvent.getController().getName() == "Seleccionar modelo 2") {
-				new Thread(new Runnable() {
-					public void run() {
-						synchronized (screen) {
-							//TODO: CODIGO REPETIDO CON SELECCIONAR MODELO 1
-							mesh2.setMesh(getMeshFromFile(screen.selectInput()));
-							modeloList.addItem("Modelo 2", 2);
-						}
-					}
-
 				}).start();
 			}
 
@@ -189,34 +166,83 @@ public class PreScreen implements ScreenPhase, ControlListener {
 
 		if (theEvent.isGroup()) {
 			if (theEvent.getGroup().getName() == "Material") {
-				MaterialItem mat = Material.getMaterialList().get(
-						(int) theEvent.getGroup().getValue());
-				
-				if(focusedMesh != null){
-					this.focusedMesh.changeMeshColor(mat.getColor());
-				}
+				MaterialItem mat = Material.getMaterialList().get((int) theEvent.getGroup().getValue());
+				selectedModel.setMaterial(mat);
 			}
-		}
-		
-		if (theEvent.isGroup()) {
 			if (theEvent.getGroup().getName() == "Modelos") {
-				if(theEvent.getGroup().getValue() == 1){
-					this.focusedMesh = mesh1;
-				}
-				else{
-					this.focusedMesh = mesh2;
-				}
+				int value = (int) theEvent.getGroup().getValue();
+//				Main.print("Selected Value: " + value + "\n");
+				setSelectedModel(findModelIndexByHash(value));
+//				Main.print("After MODEL from findmodelbyhash\n");
+				// setSelectedModel(modelList.get(value));
 			}
 		}
 	}
 
-	protected TriangleMesh getMeshFromFile(String selectedFile) {
+	private void setSelectedModel(Model model) {
+//		Main.print("Selected Model start\n");
+		selectedModel = model;
+		setSliders(selectedModel);
+//		Main.print("After set Sliders\n");
+		setMaterial(selectedModel);
+//		Main.print("Selected Model end\n");
+	}
+
+	private void setMaterial(Model selectedModel) {
+		MaterialItem material = selectedModel.getMaterial();
+		if (material != null) {
+			matList.getCaptionLabel().set(material.getName());
+		} else {
+			matList.getCaptionLabel().set("Material");
+		}
+	}
+
+	private Model findModelIndexByHash(int value) {
+		for (Model model : modelList) {
+			if (model.hashCode() == value) {
+//				Main.print("Before return MODEL from findmodelbyhash\n");
+				return model;
+			}
+		}
+//		Main.print("Before return null from findmodelbyhash\n");
+		return null;
+	}
+
+	protected TriangleMesh loadMesh(String selectedFile) {
 		if (selectedFile != null) {
-			return (TriangleMesh) new STLReader().loadBinary(
-					screen.sketchPath(selectedFile), STLReader.TRIANGLEMESH);
+			mesh = (TriangleMesh) new STLReader().loadBinary(screen.sketchPath(selectedFile), STLReader.TRIANGLEMESH);
+			Model newModel = new Model(mesh);
+			modelList.add(newModel);
+			modelsListBox.addItem("Model", newModel.hashCode());
+//			Main.print("Model hash:" + newModel.hashCode() + "\n");
+			selectedModel = newModel;
+			resetSliders();
+			resetMaterial();
+			return mesh;
 		}
 		return null;
-		
+	}
+
+	private void resetMaterial() {
+		matList.getCaptionLabel().set("Material");
+	}
+
+	private void resetSliders() {
+		posX.setValue(0);
+		posY.setValue(0);
+		posZ.setValue(0);
+		forceX.setValue(0);
+		forceY.setValue(0);
+		forceZ.setValue(0);
+	}
+
+	private void setSliders(Model model) {
+		posX.setValue(model.getPosition().x);
+		posY.setValue(model.getPosition().y);
+		posZ.setValue(model.getPosition().z);
+		forceX.setValue(model.getForce().x);
+		forceY.setValue(model.getForce().y);
+		forceZ.setValue(model.getForce().z);
 	}
 
 	private void process() {

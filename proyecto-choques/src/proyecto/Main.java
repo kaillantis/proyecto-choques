@@ -7,6 +7,7 @@ import controlP5.ControlListener;
 import controlP5.ControlP5;
 import controlP5.Controller;
 import controlP5.ControllerInterface;
+import controlP5.Slider;
 import controlP5.Textlabel;
 
 public class Main extends PApplet {
@@ -79,14 +80,15 @@ public class Main extends PApplet {
 		.getCaptionLabel().setFont(defaultFont).toUpperCase(false).align(ControlP5.CENTER, ControlP5.CENTER);
 	}
 	
-	public void addSlider(String varname, String title, int width, int height, int posX, int posY, float min, float max, ControlListener listener){
-		cp5.addSlider(varname)
-			.setCaptionLabel(title)
+	public Slider addSlider(String varname, String title, int width, int height, int posX, int posY, float min, float max, ControlListener listener){
+		Slider slider = cp5.addSlider(varname);
+			slider.setCaptionLabel(title)
 			.setSize(width, height)
 			.setPosition(posX, posY)
 			.setRange(min, max)
 			.addListener(listener)
 			.getCaptionLabel().setFont(smallFont).toUpperCase(false);
+		return slider;
 	}
 	
 	public void setTitle(String title){
