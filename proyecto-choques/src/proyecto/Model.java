@@ -5,11 +5,13 @@ import toxi.geom.mesh.Face;
 import toxi.geom.mesh.TriangleMesh;
 
 public class Model {
+	private static int IdCounter = 0;
 	private TriangleMesh mesh;
 	private Vec3D position;
 	private Vec3D meshColor;
 	private Vec3D force;
 	private MaterialItem material;
+	private int id;
 
 	public Model() {
 		this(new TriangleMesh());
@@ -20,6 +22,13 @@ public class Model {
 		this.position = new Vec3D(0, 0, 0);
 		this.force = new Vec3D(0, 0, 0);
 		this.meshColor = new Vec3D(255, 255, 255);
+		this.id = this.generateId(); 
+	}
+
+	private int generateId() {
+		int newId = IdCounter;
+		IdCounter++;
+		return newId;
 	}
 
 	public Vec3D getPosition(){
@@ -88,7 +97,12 @@ public class Model {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((mesh == null) ? 0 : mesh.hashCode());
+//		Main.print("Class hash: " + result + "\n");
 		return result;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 }

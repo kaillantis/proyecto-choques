@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
 import peasy.PeasyCam;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.STLReader;
@@ -13,6 +15,7 @@ import controlP5.ControlListener;
 import controlP5.ControlP5;
 import controlP5.DropdownList;
 import controlP5.ListBox;
+import controlP5.ListBoxItem;
 import controlP5.Slider;
 
 public class PreScreen implements ScreenPhase, ControlListener {
@@ -22,10 +25,10 @@ public class PreScreen implements ScreenPhase, ControlListener {
 	private List<Model> modelList = Collections.synchronizedList(new ArrayList<Model>());
 	private static PeasyCam camera = null;
 	private ListBox modelsListBox;
-	private String file = "";
 	private Model selectedModel;
 	private Slider posX, posY, posZ, forceX, forceY, forceZ;
 	private DropdownList matList;
+	private List<ListBoxItem> modelItems = Collections.synchronizedList(new ArrayList<ListBoxItem>());
 
 	public PreScreen(Main screen) {
 		this.screen = screen;
@@ -149,14 +152,8 @@ public class PreScreen implements ScreenPhase, ControlListener {
 			}
 
 			if (theEvent.getController().getName() == "Agregar modelo") {
-
-				new Thread(new Runnable() {
-					public void run() {
-						synchronized (screen) {
-							loadMesh(screen.selectInput());
-						}
-					}
-				}).start();
+				new Thread(new Runnable() {public void run() {synchronized (screen) {
+							loadMesh(screen.selectInput());}}}).start();
 			}
 
 			if (theEvent.getController().getName() == "Volver atras") {
@@ -170,11 +167,12 @@ public class PreScreen implements ScreenPhase, ControlListener {
 				selectedModel.setMaterial(mat);
 			}
 			if (theEvent.getGroup().getName() == "Modelos") {
-				int value = (int) theEvent.getGroup().getValue();
-//				Main.print("Selected Value: " + value + "\n");
-				setSelectedModel(findModelIndexByHash(value));
+//				Main.print("float value: " + theEvent.getGroup().getValue() + "\n");
+				int value = (int) (theEvent.getGroup().getValue());
+//				Main.print("Select hash: " + value + "\n");
+				setSelectedModel(findModelIndexById(value));
+				
 //				Main.print("After MODEL from findmodelbyhash\n");
-				// setSelectedModel(modelList.get(value));
 			}
 		}
 	}
@@ -186,6 +184,25 @@ public class PreScreen implements ScreenPhase, ControlListener {
 //		Main.print("After set Sliders\n");
 		setMaterial(selectedModel);
 //		Main.print("Selected Model end\n");
+//		modelsListBox.
+		for (ListBoxItem modelItem : modelItems){
+			if (modelItem.getValue() == model.getId()){
+				modelItem.setColorBackground(0xff08a2cf);
+			} else {
+				modelItem.setColorBackground(0xff02344d);
+			}
+		}
+		
+//		findModelItem(selectedModel).setColorBackground(screen.color(255));
+	}
+	
+	private ListBoxItem findModelItem(Model model){
+		for (ListBoxItem modelItem : modelItems){
+			if (modelItem.getValue() == model.getId()){
+				return modelItem;
+			}
+		}
+		throw new RuntimeErrorException(null, "findModelItem error. No model found.");
 	}
 
 	private void setMaterial(Model selectedModel) {
@@ -197,14 +214,14 @@ public class PreScreen implements ScreenPhase, ControlListener {
 		}
 	}
 
-	private Model findModelIndexByHash(int value) {
+	private Model findModelIndexById(int value) {
 		for (Model model : modelList) {
-			if (model.hashCode() == value) {
+			if (model.getId() == value) {
 //				Main.print("Before return MODEL from findmodelbyhash\n");
 				return model;
 			}
 		}
-//		Main.print("Before return null from findmodelbyhash\n");
+		Main.print("findModelByHash failure.\n");
 		return null;
 	}
 
@@ -213,11 +230,14 @@ public class PreScreen implements ScreenPhase, ControlListener {
 			mesh = (TriangleMesh) new STLReader().loadBinary(screen.sketchPath(selectedFile), STLReader.TRIANGLEMESH);
 			Model newModel = new Model(mesh);
 			modelList.add(newModel);
-			modelsListBox.addItem("Model", newModel.hashCode());
-//			Main.print("Model hash:" + newModel.hashCode() + "\n");
-			selectedModel = newModel;
-			resetSliders();
-			resetMaterial();
+			int modelhash = newModel.getId();
+			ListBoxItem newModelItem = modelsListBox.addItem("Model", modelhash);
+//			Main.print("Model hash:" + modelhash + "\n");
+			modelItems.add(newModelItem);
+			setSelectedModel(newModel);
+//			selectedModel = newModel;
+//			resetSliders();
+//			resetMaterial();
 			return mesh;
 		}
 		return null;
