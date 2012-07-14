@@ -12,6 +12,7 @@ public class Model {
 	private Vec3D force;
 	private MaterialItem material;
 	private int id;
+	private boolean fixed = false;
 
 	public Model() {
 		this(new TriangleMesh());
@@ -90,6 +91,18 @@ public class Model {
 	}
 	public MaterialItem getMaterial(){
 		return material;
+	}
+	
+	public boolean isFixed(){
+		return fixed;
+	}
+	
+	public void toggleFix(){
+		if (fixed){
+			fixed = false;
+		} else {
+			fixed = true; 
+		}
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import controlP5.Controller;
 import controlP5.ControllerInterface;
 import controlP5.Slider;
 import controlP5.Textlabel;
+import controlP5.Toggle;
 
 public class Main extends PApplet {
 	private static final long serialVersionUID = -7427606310430827788L;
@@ -89,6 +90,21 @@ public class Main extends PApplet {
 			.addListener(listener)
 			.getCaptionLabel().setFont(smallFont).toUpperCase(false);
 		return slider;
+	}
+	
+	public Toggle addToggle(String varname, String title, int width, int height, int posX, int posY, ControlListener listener){
+		Toggle toggle = cp5.addToggle(varname);
+			toggle.setCaptionLabel(title)
+			.setSize(width, height)
+			.setPosition(posX, posY)
+			.addListener(listener)
+			.getCaptionLabel().setFont(smallFont).toUpperCase(false);
+//			toggle.setMode(ControlP5.SWITCH);
+			
+			controlP5.Label l = toggle.getCaptionLabel();
+			l.getStyle().marginTop = -18; //move upwards (relative to button size)
+			l.getStyle().marginLeft = 20; //move to the right
+		return toggle;
 	}
 	
 	public void setTitle(String title){

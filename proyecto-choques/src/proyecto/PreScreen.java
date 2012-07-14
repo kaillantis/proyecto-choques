@@ -17,6 +17,7 @@ import controlP5.DropdownList;
 import controlP5.ListBox;
 import controlP5.ListBoxItem;
 import controlP5.Slider;
+import controlP5.Toggle;
 
 public class PreScreen implements ScreenPhase, ControlListener {
 	private Main screen;
@@ -27,6 +28,7 @@ public class PreScreen implements ScreenPhase, ControlListener {
 	private ListBox modelsListBox;
 	private Model selectedModel;
 	private Slider posX, posY, posZ, forceX, forceY, forceZ;
+	private Toggle fixToggle;
 	private DropdownList matList;
 	private List<ListBoxItem> modelItems = Collections.synchronizedList(new ArrayList<ListBoxItem>());
 
@@ -85,6 +87,8 @@ public class PreScreen implements ScreenPhase, ControlListener {
 		forceX = screen.addSlider("forceX", "Fuerza en X (N)", 200, 15, 15, 175, 0, 100, this);
 		forceY = screen.addSlider("forceY", "Fuerza en Y (N)", 200, 15, 15, 200, 0, 100, this);
 		forceZ = screen.addSlider("forceZ", "Fuerza en Z (N)", 200, 15, 15, 225, 0, 100, this);
+		
+		fixToggle = screen.addToggle("fixModel", "Fijar modelo", 15, 15, 15, 250, this);
 
 		screen.addButton("Procesar", 300, 30, 490, 690, this);
 
@@ -146,6 +150,11 @@ public class PreScreen implements ScreenPhase, ControlListener {
 			if (theEvent.getController().getName() == "forceZ") {
 				selectedModel.updateForceZ(theEvent.getController().getValue());
 			}
+			
+			if (theEvent.getController().getName() == "fixModel") {
+				selectedModel.toggleFix();
+				setFixStatus(selectedModel);
+			}
 
 			if (theEvent.getController().getName() == "Procesar") {
 				process();
@@ -183,6 +192,7 @@ public class PreScreen implements ScreenPhase, ControlListener {
 		setSliders(selectedModel);
 //		Main.print("After set Sliders\n");
 		setMaterial(selectedModel);
+		setFixStatus(selectedModel);
 //		Main.print("Selected Model end\n");
 //		modelsListBox.
 		for (ListBoxItem modelItem : modelItems){
@@ -196,6 +206,12 @@ public class PreScreen implements ScreenPhase, ControlListener {
 //		findModelItem(selectedModel).setColorBackground(screen.color(255));
 	}
 	
+	private void setFixStatus(Model selectedModel) {
+		fixToggle.removeListener(this);
+		fixToggle.setValue(selectedModel.isFixed());
+		fixToggle.addListener(this);
+	}
+
 	private ListBoxItem findModelItem(Model model){
 		for (ListBoxItem modelItem : modelItems){
 			if (modelItem.getValue() == model.getId()){
