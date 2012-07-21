@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MSHReader {
@@ -13,11 +16,14 @@ public class MSHReader {
 	ArrayList<Node> listaDeNodos = new ArrayList<Node>();
 	BufferedReader fileReader = null;
 	int cantidadDeNumeros = 0;
+	Map<Integer, Elemento> diccionarioElementos = null;
 	
 	char[] coordenadaX;
 	char[] coordenadaY;
 	char[] coordenadaZ;
     
+	this.crearDiccionarioElementos(diccionarioElementos);
+	
     try {
     	fileReader = new BufferedReader(new FileReader("C:/Users/Ivan/Desktop/tuvieja.msh"));
     } catch (Exception e) { 
@@ -107,6 +113,21 @@ public class MSHReader {
 			
 		}
 			
+	}
+
+	private Object crearDiccionarioElementos(
+			Map<Integer, Elemento> diccionarioElementos) {
+		// TODO Auto-generated method stub
+		diccionarioElementos = new HashMap<Integer, Elemento>();
+		diccionarioElementos.put(1, new Linea());
+		diccionarioElementos.put(2, new Triangulo());
+		diccionarioElementos.put(3, new Cuadrangulo());
+		diccionarioElementos.put(4, new Tetraedro());
+		diccionarioElementos.put(5, new Hexaedro());
+		diccionarioElementos.put(6, new Prisma());
+		diccionarioElementos.put(7, new Piramide());
+		return null;
+		
 	}
 
 	private void getNumeroDeParticionMesh(int j, char[] posicionesDeElementos) {
