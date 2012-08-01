@@ -17,7 +17,8 @@
 
 package impactTest;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Hashtable;
 
 
 /**

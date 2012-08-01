@@ -17,7 +17,8 @@
 
 package impactTest;
 
-import java.util.*;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * This is a Line contact element. Its sole purpuse is to sense contact against

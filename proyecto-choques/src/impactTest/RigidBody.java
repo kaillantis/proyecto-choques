@@ -19,7 +19,7 @@ package impactTest;
 
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.Vector;
 
 
 /**

@@ -1,7 +1,6 @@
 package impactTest;
 
 import java.awt.Color;
-import java.io.*;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;

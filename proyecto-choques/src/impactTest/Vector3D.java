@@ -16,7 +16,7 @@
  */
 
 package impactTest;
-import java.io.*;
+import java.io.Serializable;
 
 /**
  * A fairly conventional 3D vector object that can be used for calculation

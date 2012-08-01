@@ -16,9 +16,11 @@
  */
 package impactTest;
 
-import java.awt.*;
-import javax.swing.tree.*;
+import java.awt.Color;
+
 import javax.swing.SpringLayout.Constraints;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
 
 public class Nodo{
 	

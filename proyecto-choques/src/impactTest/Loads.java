@@ -15,8 +15,8 @@
  * USA
  */
 package impactTest;
-import java.awt.*;
-import java.io.*;
+import java.awt.Color;
+import java.io.Serializable;
 
 /**
  * Insert the type's description here.

@@ -1,12 +1,12 @@
 package choques;
 
-import controlP5.ControlP5;
 import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.core.PImage;
 import toxi.geom.mesh.STLReader;
 import toxi.geom.mesh.TriangleMesh;
 import toxi.processing.ToxiclibsSupport;
+import controlP5.ControlP5;
 
 
 public class Choques extends PApplet {
