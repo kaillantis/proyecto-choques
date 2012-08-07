@@ -243,6 +243,9 @@ public class PreScreen implements ScreenPhase, ControlListener {
 
 	protected TriangleMesh loadMesh(String selectedFile) {
 		if (selectedFile != null) {
+//			CDVReader reader = new CDVReader(selectedFile);
+//			mesh = reader.getMesh();
+			
 			mesh = (TriangleMesh) new STLReader().loadBinary(screen.sketchPath(selectedFile), STLReader.TRIANGLEMESH);
 			Model newModel = new Model(mesh);
 			modelList.add(newModel);
