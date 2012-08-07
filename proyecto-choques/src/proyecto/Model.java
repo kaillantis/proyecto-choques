@@ -10,7 +10,7 @@ public class Model {
 	private Vec3D position;
 	private Vec3D meshColor;
 	private Vec3D force;
-	private MaterialItem material;
+	private Material material;
 	private int id;
 	private boolean fixed = false;
 
@@ -85,11 +85,11 @@ public class Model {
 		screen.vertex(v.x, v.y, v.z);
 	}
 
-	public void setMaterial(MaterialItem mat) {
+	public void setMaterial(Material mat) {
 		material = mat;
 		meshColor = mat.getColor();
 	}
-	public MaterialItem getMaterial(){
+	public Material getMaterial(){
 		return material;
 	}
 	

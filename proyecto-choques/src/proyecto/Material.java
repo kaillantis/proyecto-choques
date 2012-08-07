@@ -1,31 +1,33 @@
 package proyecto;
 
-import java.util.ArrayList;
-import java.util.List;
+import toxi.geom.Vec3D;
 
 public class Material {
-	private static List<MaterialItem> materialList = new ArrayList<MaterialItem>();
+	private String name;
+	private String characteristics;
+	private Vec3D color;
 	
-	static {
-		Material.addMaterial("Plata", "E = 68.9441 NU = 0.370000 RHO = 0.0000105 FAILURE_STRESS = 0.1240994 YIELD_STRESS = 0.05515528 EP = 0.01",192,192,192);
-		Material.addMaterial("Plomo","E = 13.78882 NU = 0.425000 RHO = 0.00001134 FAILURE_STRESS = 0.01792547 YIELD_STRESS = 0.008962733  EP = 0.001", 119,117,118);
+	public Material(String name2, String characteristics, int colorR,int colorG,int colorB){
+			this.name = name2;
+			this.characteristics = characteristics;
+			this.color = new Vec3D(colorR,colorG,colorB); 
 	}
 	
-	public static List<MaterialItem> getMaterialList() {
-		return materialList;
+	public String getName() {
+		return name;
 	}
 	
-	public static void addMaterial(String name, String chatacteristics, int colorR, int colorG, int colorB){
-		MaterialItem newItem = new MaterialItem(name,chatacteristics, colorR,colorG,colorB);
-		materialList.add(newItem);
+	@Override
+	public String toString() {
+		return name;
 	}
-	
-	public static MaterialItem getMaterial(String name) {
-		for (MaterialItem tempItem : materialList) {
-			if (tempItem.getName().equals(name)){
-				return tempItem;
-			}
-		}
-		return null;
+
+	public String getCharacteristics() {
+		return characteristics;
 	}
+
+	public Vec3D getColor() {
+		return color;
+	}
+
 }

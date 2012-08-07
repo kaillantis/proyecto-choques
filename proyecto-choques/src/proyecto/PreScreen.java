@@ -120,7 +120,7 @@ public class PreScreen implements ScreenPhase, ControlListener {
 		matList.setSize(200, 200);
 		matList.setBarHeight(18);
 		matList.getCaptionLabel().setFont(screen.smallFont).toUpperCase(false);
-		matList.addItems(Material.getMaterialList());
+		matList.addItems(MaterialList.getMaterialList());
 		matList.addListener(this);
 
 	}
@@ -172,7 +172,7 @@ public class PreScreen implements ScreenPhase, ControlListener {
 
 		if (theEvent.isGroup()) {
 			if (theEvent.getGroup().getName() == "Material") {
-				MaterialItem mat = Material.getMaterialList().get((int) theEvent.getGroup().getValue());
+				Material mat = MaterialList.getMaterialList().get((int) theEvent.getGroup().getValue());
 				selectedModel.setMaterial(mat);
 			}
 			if (theEvent.getGroup().getName() == "Modelos") {
@@ -222,7 +222,7 @@ public class PreScreen implements ScreenPhase, ControlListener {
 	}
 
 	private void setMaterial(Model selectedModel) {
-		MaterialItem material = selectedModel.getMaterial();
+		Material material = selectedModel.getMaterial();
 		if (material != null) {
 			matList.getCaptionLabel().set(material.getName());
 		} else {
